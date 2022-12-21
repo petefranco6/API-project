@@ -55,9 +55,9 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Spot, {
         through: models.Booking
       })
-      User.belongsToMany(models.Spot, {
-        through: models.Review
-      })
+      // User.belongsToMany(models.Spot, {
+      //   through: models.Review
+      // })
     }
   }
   User.init(
