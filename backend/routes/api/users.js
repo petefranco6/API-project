@@ -11,9 +11,11 @@ const validateSignup = [
   check("email")
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage("Please provide a valid email."),
+    .withMessage("Invalid email"),
   check("username")
-    .exists({ checkFalsy: true })
+    .exists({checkFalsy: true})
+    .withMessage("Username is required"),
+  check("username")
     .isLength({ min: 4 })
     .withMessage("Please provide a username with at least 4 characters."),
   check("username").not().isEmail().withMessage("Username cannot be an email."),
@@ -21,13 +23,51 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage("Password must be 6 characters or more."),
+  check("firstName")
+    .exists({checkFalsy: true})
+    .withMessage("First Name is required"),
+  check("lastName")
+    .exists({checkFalsy: true})
+    .withMessage("Last Name is required"),
   handleValidationErrors,
 ];
 
 // Sign up
-router.post("/", validateSignup, async (req, res) => {
+router.post("/", validateSignup, async (req, res, next) => {
   const { firstName, lastName, email, username, password } = req.body;
-  const user = await User.signup({ firstName, lastName, email, username, password });
+  const emailExists = await User.findOne({
+    where: {
+      email: email,
+    },
+  });
+
+  const usernameExists = await User.findOne({
+    where: {
+      username: username,
+    },
+  });
+
+  if (emailExists) {
+    const err = new Error("User already exists");
+    err.status = 403;
+    err.errors = ["User with that email already exists"];
+    return next(err);
+  }
+
+  if (usernameExists) {
+    const err = new Error("User already exists");
+    err.status = 403;
+    err.errors = ["User with that username already exists"];
+    return next(err);
+  }
+
+  const user = await User.signup({
+    firstName,
+    lastName,
+    email,
+    username,
+    password,
+  });
 
   await setTokenCookie(res, user);
 
