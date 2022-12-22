@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "Users",
+      "Reviews",
       {
         id: {
           allowNull: false,
@@ -17,27 +17,26 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        firstName: {
-          type: Sequelize.STRING(256),
-          allowNull: false,
+        spotId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Spots",
+          },
+          allowNull: false
         },
-        lastName: {
-          type: Sequelize.STRING(256),
-          allowNull: false,
+        userId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Users",
+          },
+          allowNull: false
         },
-        email: {
-          type: Sequelize.STRING(256),
-          allowNull: false,
-          unique: true,
+        review: {
+          type: Sequelize.STRING,
         },
-        username: {
-          type: Sequelize.STRING(30),
-          allowNull: false,
-          unique: true,
-        },
-        hashedPassword: {
-          type: Sequelize.STRING.BINARY,
-          allowNull: false,
+        stars: {
+          type: Sequelize.INTEGER,
+          allowNull: false
         },
         createdAt: {
           allowNull: false,
@@ -52,19 +51,9 @@ module.exports = {
       },
       options
     );
-
-    options.tableName = "Users";
-
-    await queryInterface.addIndex(options, ["username"]);
-
-    await queryInterface.addIndex(options, ["email"]);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = "Users";
+    options.tableName = "Reviews";
     await queryInterface.dropTable(options);
-
-    await queryInterface.removeIndex(options, ["username"]);
-
-    await queryInterface.removeIndex(options, ["email"]);
   },
 };
