@@ -335,8 +335,8 @@ Returns the details of a spot specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: /api/spots/:spotId
   * Body: none
 
 * Successful Response
@@ -401,8 +401,8 @@ Creates and returns a new spot.
 
 * Require Authentication: true
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: POST
+  * URL: /api/spots
   * Headers:
     * Content-Type: application/json
   * Body:
