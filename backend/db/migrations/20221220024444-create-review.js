@@ -17,13 +17,13 @@ module.exports = {
       },
       spotId: {
         type: Sequelize.INTEGER,
-        refrences: {
+        references: {
           model: 'Spots'
         }
       },
       userId: {
         type: Sequelize.INTEGER,
-        refrences: {
+        references: {
           model: 'Users'
         }
       },
