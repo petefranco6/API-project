@@ -51,8 +51,8 @@ Returns the information about the current user that is logged in.
 
 * Require Authentication: true
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: /api/session
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -92,8 +92,8 @@ information.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: POST
+  * URL: /api/session
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -161,8 +161,8 @@ user's information.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: POST
+  * URL: /api/users
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -255,8 +255,8 @@ Returns all the spots.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: api/spots
   * Body: none
 
 * Successful Response
@@ -335,8 +335,8 @@ Returns the details of a spot specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: /api/spots/:spotId
   * Body: none
 
 * Successful Response
@@ -401,8 +401,8 @@ Creates and returns a new spot.
 
 * Require Authentication: true
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: POST
+  * URL: /api/spots
   * Headers:
     * Content-Type: application/json
   * Body:
