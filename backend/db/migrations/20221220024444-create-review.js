@@ -19,13 +19,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         refrences: {
           model: 'Spots'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       userId: {
         type: Sequelize.INTEGER,
         refrences: {
           model: 'Users'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       review: {
         type: Sequelize.STRING
