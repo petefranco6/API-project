@@ -1,6 +1,7 @@
 "use strict";
 
 const bcrypt = require("bcryptjs");
+const moment = require("moment")
 const { Model, Validator } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -54,12 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Spot, {foreignKey: "ownerId"})
       User.hasMany(models.Booking, {foreignKey: "userId"})
       User.hasMany(models.Review, {foreignKey: "userId"})
-      // User.belongsToMany(models.Spot, {
-      //   through: models.Booking
-      // })
-      // User.belongsToMany(models.Spot, {
-      //   through: models.Review
-      // })
+
     }
   }
   User.init(
@@ -103,6 +99,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         len: [60, 60],
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        get() {
+          return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm:ss');
+        },
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        get() {
+          return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss');
+        },
+      }
     },
     {
       sequelize,
