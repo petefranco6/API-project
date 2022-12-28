@@ -1,7 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const moment = require("moment")
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     /**
@@ -11,32 +10,43 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Spot.belongsTo(models.User, {foreignKey: "ownerId", as: "Owner"})
-      // Spot.belongsToMany(models.User, {
-      //   through: models.Booking
-      // })
-      // Spot.belongsToMany(models.User, {
-      //   through: models.Review
-      // })
-      Spot.hasMany(models.SpotImage, {foreignKey:'spotId'})
-      Spot.hasMany(models.Review, { foreignKey: "spotId"})
-      Spot.hasMany(models.Booking, {foreignKey: "spotId"})
+      Spot.belongsTo(models.User, { foreignKey: "ownerId", as: "Owner" });
+      Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
+      Spot.hasMany(models.Review, { foreignKey: "spotId" });
+      Spot.hasMany(models.Booking, { foreignKey: "spotId" });
     }
   }
-  Spot.init({
-    ownerId: DataTypes.INTEGER,
-    address: DataTypes.STRING,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING,
-    country: DataTypes.STRING,
-    lat: DataTypes.DECIMAL,
-    lng: DataTypes.DECIMAL,
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    price: DataTypes.DECIMAL
-  }, {
-    sequelize,
-    modelName: 'Spot',
-  });
+  Spot.init(
+    {
+      ownerId: DataTypes.INTEGER,
+      address: DataTypes.STRING,
+      city: DataTypes.STRING,
+      state: DataTypes.STRING,
+      country: DataTypes.STRING,
+      lat: DataTypes.DECIMAL,
+      lng: DataTypes.DECIMAL,
+      name: DataTypes.STRING,
+      description: DataTypes.STRING,
+      price: DataTypes.DECIMAL,
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        get() {
+          return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm:ss');
+        },
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        get() {
+          return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss');
+        },
+      }
+    },
+    {
+      sequelize,
+      modelName: "Spot",
+    }
+  );
   return Spot;
 };
