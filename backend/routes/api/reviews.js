@@ -7,7 +7,12 @@ const {
   SpotImage,
   sequelize,
 } = require("../../db/models");
-const { requireAuth } = require("../../utils/auth");
+const {
+  requireAuth,
+  getEntity,
+  checkOwnership,
+  checkPermission,
+} = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
@@ -15,34 +20,18 @@ const router = express.Router();
 
 const validateReview = [
   check("review")
-    .exists({checkFalsy: true})
+    .exists({ checkFalsy: true })
     .withMessage("Review text is required"),
   check("stars")
-    .exists({checkFalsy: true})
-    .isInt({min:1, max:5})
+    .exists({ checkFalsy: true })
+    .isInt({ min: 1, max: 5 })
     .withMessage("Stars must be an integer from 1 to 5"),
-    handleValidationErrors
-]
+  handleValidationErrors,
+];
 
 router.get("/current", requireAuth, async (req, res) => {
   const { user } = req;
 
-//   const spot = await Spot.findOne({
-//     where: {
-
-//     }
-//     include: [
-//         {
-//             model: Review,
-//             attributes: []
-//         }
-//     ],
-//     attributes: {
-//         include: [
-//             [Sequelize.col("SpotImages.url"), "previewImage"]
-//         ]
-//     }
-//   })
   const userReviews = await Review.findAll({
     where: {
       userId: user.id,
@@ -54,18 +43,20 @@ router.get("/current", requireAuth, async (req, res) => {
       },
       {
         model: Spot,
-        include: [{
-            model: SpotImage,
-            attributes: {}
-        }],
+        include: {
+          model: SpotImage,
+          where: {
+            preview: true,
+          },
+          attributes: [[sequelize.col("url"), "previewImage"]],
+        },
         // attributes: {
-        //     include: [
-        //         [sequelize.literal("Spot.SpotImages.url"), "previewImage"],
-        //     ]
-        // }
+        //   include: [[sequelize.fn("COUNT", sequelize.col("spotimages.id")), "previewImage"]],
+        // },
       },
       {
         model: ReviewImage,
+        attributes: ["id", "url"],
       },
     ],
   });
@@ -76,87 +67,67 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 //Add an img to a review using reviewId
-router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
-    const {url} = req.body;
-    const { user} = req;
-
-    const reviewId = req.params.reviewId;
-
-    const review = await Review.findOne({
-        where: {
-            userId: user.id,
-            id: reviewId
-        }
-    })
-
-    if(!review) {
-        const err = new Error("Review couldn't be found")
-        err.status = 404;
-        return next(err)
-    }
+router.post(
+  "/:id/images",
+  [
+    ...requireAuth,
+    checkPermission([1, 2]),
+    getEntity("review", true),
+    checkOwnership,
+  ],
+  async (req, res, next) => {
+    const { url } = req.body;
 
     const newReviewImage = await ReviewImage.create({
-        reviewId,
-        url
-    })
+      reviewId: req.entity.id,
+      url,
+    });
 
     res.json({
-        id:newReviewImage.reviewId,
-        url: newReviewImage.url
-    })
-})
+      id: newReviewImage.reviewId,
+      url: newReviewImage.url,
+    });
+  }
+);
 
 //Edit a Review
-router.put("/:reviewId", requireAuth, validateReview, async (req, res, next) => {
-  const { user } = req;
-  const {review, stars} = req.body;
-  const reviewId = req.params.reviewId
+router.put(
+  "/:id",
+  [
+    ...requireAuth,
+    checkPermission([1, 2]),
+    getEntity("review", true),
+    checkOwnership,
+  ],
+  validateReview,
+  async (req, res, next) => {
+    const { review, stars } = req.body;
 
-  const foundReview = await Review.findOne({
-    where: {
-      id: reviewId,
-      userId: user.id
-    }
-  })
+    const editedReview = await req.entity.update({
+      review,
+      stars,
+    });
 
-  if(!foundReview) {
-    const err = new Error("Review couldn't be found")
-    err.status = 404
-    return next(err)
+    res.json(editedReview);
   }
-
-  const editedReview = await foundReview.update({
-    review,
-    stars
-  })
-
-  res.json(editedReview)
-})
+);
 
 //Delete a review
-router.delete("/:reviewId", requireAuth, async (req, res, next) => {
-  const { user } = req;
-  const reviewId = req.params.reviewId
+router.delete(
+  "/:id",
+  [
+    ...requireAuth,
+    checkPermission([1, 2]),
+    getEntity("review", true),
+    checkOwnership,
+  ],
+  async (req, res, next) => {
+    await req.entity.destroy();
 
-  const review = await Review.findOne({
-    where: {
-      id: reviewId,
-      userId: user.id
-    }
-  })
-
-  if(!review) {
-    const err = new Error ("Review couldn't be found")
-    err.status = 404
-    return next(err)
+    res.status(200).json({
+      message: "Successfully deleted review.",
+    });
   }
-
-  await review.destroy();
-
-  res.status(200).json({
-    message: "Successfully deleted review."
-  })
-
-})
+);
 
 module.exports = router;
