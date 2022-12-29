@@ -85,7 +85,8 @@ router.post(
       include: {
         model: ReviewImage,
         attributes:[]
-      }
+      },
+      group: ["Review.id"]
     })
 
     const revieww = review.toJSON()

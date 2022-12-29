@@ -80,7 +80,7 @@ const getEntity = (tableName, mustBelongTo) => {
       const spotImage = await SpotImage.findByPk(id)
       if(!spotImage){
         const err = new Error("Spot Image couldn't be found")
-        err.status(404)
+        err.status = 404
         return next(err)
       }
       foundEntity = await Spot.findByPk(spotImage.spotId)
@@ -88,7 +88,7 @@ const getEntity = (tableName, mustBelongTo) => {
       const reviewImage = await ReviewImage.findByPk(id)
       if(!reviewImage){
         const err = new Error("Review Image couldn't be found")
-        err.status(404)
+        err.status = 404
         return next(err)
       }
       foundEntity = await Review.findByPk(reviewImage.reviewId)
