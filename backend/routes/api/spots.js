@@ -37,12 +37,12 @@ const validateSpot = [
     .withMessage("Latitude is not valid."),
   check("lng")
     .exists({ checkFalsy: true })
-    .isNumeric()
+    .isDecimal()
     .withMessage("Longitude is not valid."),
   check("name")
     .exists({ checkFalsy: true })
     .isLength({ max: 49 })
-    .isAlpha()
+    .matches(/^[a-zA-Z\s]+$/)
     .withMessage("Name must be less than 50 characters."),
   check("description")
     .exists({ checkFalsy: true })
@@ -189,13 +189,15 @@ router.get("/", validateSpotQuery, async (req, res) => {
           preview: true
         },
         attributes: [],
+        required: false
       },
       {
         model: Review,
         attributes: [],
+        required: false
       },
     ],
-    group: ["Spot.id"],
+    group: ["Spot.id"]
   });
 
   return res.json({
@@ -208,6 +210,7 @@ router.get("/", validateSpotQuery, async (req, res) => {
 //get all spots owned by current User
 router.get("/current", requireAuth, async (req, res) => {
   const { user } = req;
+
 
   const spots = await Spot.findAll({
     where: {
@@ -226,15 +229,15 @@ router.get("/current", requireAuth, async (req, res) => {
           preview: true
         },
         attributes: [],
+        required: false
       },
       {
         model: Review,
         attributes: [],
+        required: false
       },
     ],
     group: ["Spot.id"],
-    limit: size,
-    offset: size * (page - 1)
   });
 
   res.json({
@@ -283,7 +286,7 @@ router.get("/:spotId", async (req, res, next) => {
 
 //create a spot
 router.post("/", requireAuth, validateSpot, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, descripton, price } =
+  const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
 
   const { user } = req;
@@ -297,7 +300,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     lat,
     lng,
     name,
-    descripton,
+    description,
     price,
   });
   return res.status(201).json(spot);
@@ -397,6 +400,7 @@ router.get("/:spotId/reviews", async (req, res, next) => {
       {
         model: ReviewImage,
         attributes: ["id", "url"],
+        required: false
       },
     ],
   });

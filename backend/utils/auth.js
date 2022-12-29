@@ -78,9 +78,19 @@ const getEntity = (tableName, mustBelongTo) => {
       foundEntity = await Spot.findByPk(id)
     } else if(tableName === "spotImage") {
       const spotImage = await SpotImage.findByPk(id)
+      if(!spotImage){
+        const err = new Error("Spot Image couldn't be found")
+        err.status(404)
+        return next(err)
+      }
       foundEntity = await Spot.findByPk(spotImage.spotId)
     } else if (tableName === "reviewImage") {
       const reviewImage = await ReviewImage.findByPk(id)
+      if(!reviewImage){
+        const err = new Error("Review Image couldn't be found")
+        err.status(404)
+        return next(err)
+      }
       foundEntity = await Review.findByPk(reviewImage.reviewId)
     }
 

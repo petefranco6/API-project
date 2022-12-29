@@ -10,12 +10,6 @@ router.delete("/:id", [...requireAuth, checkPermission([1,2]),getEntity("reviewI
 
     const reviewImageFound = await ReviewImage.findByPk(req.params.id)
 
-    if (!reviewImageFound) {
-        const err = new Error("review image couldn't be found")
-        err.status = 404
-        return next(err)
-    }
-
     await reviewImageFound.destroy()
 
     res.json({
