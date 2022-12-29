@@ -45,17 +45,16 @@ router.get("/current", requireAuth, async (req, res) => {
         model: Spot,
         include: {
           model: SpotImage,
+          required: false,
           where: {
             preview: true,
           },
-          attributes: [[sequelize.col("url"), "previewImage"]],
-        },
-        // attributes: {
-        //   include: [[sequelize.fn("COUNT", sequelize.col("spotimages.id")), "previewImage"]],
-        // },
+          attributes: [["url","url"]]
+        }
       },
       {
         model: ReviewImage,
+        required: false,
         attributes: ["id", "url"],
       },
     ],
@@ -78,13 +77,35 @@ router.post(
   async (req, res, next) => {
     const { url } = req.body;
 
+    const review = await Review.findOne({
+      where: {
+        id: req.params.id
+      },
+      attributes: [[sequelize.fn("COUNT", sequelize.col("ReviewImages.id")), "imageCount"]],
+      include: {
+        model: ReviewImage,
+        attributes:[]
+      }
+    })
+
+    const revieww = review.toJSON()
+
+    console.log(revieww.imageCount)
+
+    if(revieww.imageCount >= 10) {
+      const err = new Error("Maximum number of images for this resource was reached")
+      err.status = 403
+      return next(err)
+    }
+
+
     const newReviewImage = await ReviewImage.create({
       reviewId: req.entity.id,
       url,
     });
 
     res.json({
-      id: newReviewImage.reviewId,
+      id: newReviewImage.id,
       url: newReviewImage.url,
     });
   }

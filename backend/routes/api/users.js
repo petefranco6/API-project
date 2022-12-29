@@ -16,9 +16,6 @@ const validateSignup = [
   check("username")
     .exists({checkFalsy: true})
     .withMessage("Username is required"),
-  check("username")
-    .isLength({ min: 4 })
-    .withMessage("Please provide a username with at least 4 characters."),
   check("username").not().isEmail().withMessage("Username cannot be an email."),
   check("password")
     .exists({ checkFalsy: true })
@@ -26,9 +23,11 @@ const validateSignup = [
     .withMessage("Password must be 6 characters or more."),
   check("firstName")
     .exists({checkFalsy: true})
+    .isAlpha()
     .withMessage("First Name is required"),
   check("lastName")
     .exists({checkFalsy: true})
+    .isAlpha()
     .withMessage("Last Name is required"),
   handleValidationErrors,
 ];
@@ -36,32 +35,29 @@ const validateSignup = [
 // Sign up
 router.post("/", validateSignup, async (req, res, next) => {
   const { firstName, lastName, email, username, password } = req.body;
-  const emailOrUsernameExists = await User.findOne({
+  const emailExists = await User.findOne({
     where: {
-      [Op.or]: [
-        {email},
-        {username}
-      ]
+      email
     },
   });
 
-  // const usernameExists = await User.findOne({
-  //   where: {
-  //     username: username,
-  //   },
-  // });
+  const usernameExists = await User.findOne({
+    where: {
+      username
+    },
+  });
 
-  // if (emailExists) {
-  //   const err = new Error("User already exists");
-  //   err.status = 403;
-  //   err.errors = ["User with that email already exists"];
-  //   return next(err);
-  // }
-
-  if (emailOrUsernameExists) {
+  if (emailExists) {
     const err = new Error("User already exists");
     err.status = 403;
-    err.errors = ["User with that username or email already exists"];
+    err.errors = ["User with that email already exists"];
+    return next(err);
+  }
+
+  if (usernameExists) {
+    const err = new Error("User already exists");
+    err.status = 403;
+    err.errors = ["User with that username already exists"];
     return next(err);
   }
 
@@ -71,6 +67,7 @@ router.post("/", validateSignup, async (req, res, next) => {
     email,
     username,
     password,
+    roleId: 1
   });
 
   await setTokenCookie(res, user);
