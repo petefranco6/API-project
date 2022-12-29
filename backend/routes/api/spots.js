@@ -197,7 +197,7 @@ router.get("/", validateSpotQuery, async (req, res) => {
         required: false
       },
     ],
-    group: ["Spot.id"]
+    group: ["Spot.id","SpotImages.url"]
   });
 
   return res.json({
@@ -237,7 +237,7 @@ router.get("/current", requireAuth, async (req, res) => {
         required: false
       },
     ],
-    group: ["Spot.id"],
+    group: ["SpotImages.url"],
   });
 
   res.json({
