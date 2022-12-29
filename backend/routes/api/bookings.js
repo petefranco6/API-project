@@ -107,7 +107,7 @@ router.put(
 
     const booking = await Booking.findOne({
       where: {
-        id,
+        id: req.params.id,
       },
       include: {
         model: Spot,
