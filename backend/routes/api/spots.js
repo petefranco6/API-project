@@ -237,7 +237,7 @@ router.get("/current", requireAuth, async (req, res) => {
         required: false
       },
     ],
-    group: ["SpotImages.url"],
+    group: ["Spot,id","SpotImages.url"],
   });
 
   res.json({
@@ -273,6 +273,7 @@ router.get("/:spotId", async (req, res, next) => {
         attributes: ["id", "url", "preview"],
       },
     ],
+    group: ["Spot.id"]
   });
 
   if (!spot.id) {
@@ -452,7 +453,7 @@ router.post(
   }
 );
 
-//Get all Booking for a spot based on spotId
+//Get all Bookings for a spot based on spotId
 router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   const spotId = req.params.spotId;
   const { user } = req;
@@ -508,7 +509,7 @@ router.post(
 
     const spot = await Spot.findOne({
       where: {
-        id,
+        id:req.params.id,
       },
       include: {
         model: Booking,
