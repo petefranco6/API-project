@@ -273,7 +273,7 @@ router.get("/:spotId", async (req, res, next) => {
         attributes: ["id", "url", "preview"],
       },
     ],
-    group: ["Spot.id"]
+    group: ["Spot.id", "Owner.id"]
   });
 
   if (!spot.id) {
