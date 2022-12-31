@@ -178,13 +178,14 @@ router.get("/", validateSpotQuery, async (req, res) => {
     where,
     attributes: {
       include: [
-        [Sequelize.col("SpotImages.url"), "previewImage"],
+        [Sequelize.col("spotImages.url"), "previewImage"],
         [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
       ],
     },
     include: [
       {
         model: SpotImage,
+        as: "spotImages",
         where: {
           preview: true
         },
@@ -197,7 +198,7 @@ router.get("/", validateSpotQuery, async (req, res) => {
         required: false
       },
     ],
-    group: ["Spot.id","SpotImages.url"]
+    group: ["Spot.id","spotImages.url"]
   });
 
   return res.json({
@@ -218,13 +219,14 @@ router.get("/current", requireAuth, async (req, res) => {
     },
     attributes: {
       include: [
-        [Sequelize.col("SpotImages.url"), "previewImage"],
+        [Sequelize.col("spotImages.url"), "previewImage"],
         [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
       ],
     },
     include: [
       {
         model: SpotImage,
+        as: "spotImages",
         where: {
           preview: true
         },
@@ -237,7 +239,7 @@ router.get("/current", requireAuth, async (req, res) => {
         required: false
       },
     ],
-    group: ["Spot.id","SpotImages.url"],
+    group: ["Spot.id","spotImages.url"],
   });
 
   res.json({

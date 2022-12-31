@@ -3,8 +3,8 @@ const {
   Review,
   User,
   Spot,
-  ReviewImage,
   SpotImage,
+  ReviewImage,
   sequelize,
 } = require("../../db/models");
 const {
@@ -45,11 +45,12 @@ router.get("/current", requireAuth, async (req, res) => {
         model: Spot,
         include: {
           model: SpotImage,
+          as: "previewImage",
           required: false,
           where: {
             preview: true,
           },
-          attributes: [["url","url"]]
+          attributes: ["url"],
         }
       },
       {
@@ -58,10 +59,17 @@ router.get("/current", requireAuth, async (req, res) => {
         attributes: ["id", "url"],
       },
     ],
+   // group: ["SpotImages.url"]
+  });
+
+  const plainUserReviews = userReviews.map(userReview => {
+    const plainUserReview = userReview.get({ plain: true });
+    plainUserReview.Spot.previewImage = plainUserReview.Spot.previewImage.url;
+    return plainUserReview;
   });
 
   res.json({
-    Reviews: userReviews,
+    Reviews: plainUserReviews,
   });
 });
 

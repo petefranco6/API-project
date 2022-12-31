@@ -36,21 +36,29 @@ router.get("/current", requireAuth, async (req, res) => {
     },
     include: {
       model: Spot,
+      attributes: {
+        exclude: ["createdAt", "updatedAt"]
+      },
       include: {
         model: SpotImage,
+        as: "previewImage",
+        required: false,
         where: {
           preview: true,
         },
-        attributes: [[sequelize.col("url"), "previewImage"]]
+        attributes: ["url"]
       },
-      // attributes: {
-      //   include: [[sequelize.col("SpotImages.url"), "previewImage"]],
-      // },
     },
   });
 
+  const plainUserBookings = userBookings.map(userBooking => {
+    const plainUserBooking = userBooking.get({ plain: true });
+    plainUserBooking.Spot.previewImage = plainUserBooking.Spot.previewImage.url;
+    return plainUserBooking
+  })
+
   res.json({
-    Bookings: userBookings,
+    Bookings: plainUserBookings,
   });
 });
 
