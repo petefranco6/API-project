@@ -64,7 +64,7 @@ router.get("/current", requireAuth, async (req, res) => {
 
   const plainUserReviews = userReviews.map(userReview => {
     const plainUserReview = userReview.get({ plain: true });
-    plainUserReview.Spot.previewImage = plainUserReview.Spot.previewImage.url;
+    plainUserReview.Spot.previewImage = plainUserReview.Spot.previewImage?.url;
     return plainUserReview;
   });
 

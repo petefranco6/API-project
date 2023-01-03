@@ -53,7 +53,7 @@ router.get("/current", requireAuth, async (req, res) => {
 
   const plainUserBookings = userBookings.map(userBooking => {
     const plainUserBooking = userBooking.get({ plain: true });
-    plainUserBooking.Spot.previewImage = plainUserBooking.Spot.previewImage.url;
+    plainUserBooking.Spot.previewImage = plainUserBooking.Spot.previewImage?.url;
     return plainUserBooking
   })
 

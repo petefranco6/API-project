@@ -279,7 +279,7 @@ router.get("/:spotId", async (req, res, next) => {
     group: ["Spot.id", "Owner.id", "spotImages.id"]
   });
 
-  if (!spot.id) {
+  if (!spot) {
     const err = new Error("Spot Couldn't be found");
     err.status = 404;
     return next(err);
