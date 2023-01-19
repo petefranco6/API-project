@@ -9,9 +9,11 @@ import App from "./App";
 
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 
-import store from "./store";
+import configureStore from "./store";
 import { logout } from "./store/session";
 import { Modal, ModalProvider } from "./context/Modal";
+
+const store = configureStore();
 
 if (process.env.NODE_ENV !== "production") {
   restoreCSRF();

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { signup } from "../../store/session";
+import * as sessionActions from "../../store/session";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ function SignupFormModal() {
     e.preventDefault();
     if (password === confirmPassword) {
       setErrors([]);
-      return dispatch(signup({ email, username, firstName, lastName, password }))
+      return dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
