@@ -6,6 +6,8 @@ import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import { Link } from "react-router-dom";
+import profile from "../../icons/profile.png";
+import menu from "../../icons/menu.png";
 
 import classes from "./ProfileButton.module.css";
 
@@ -43,8 +45,9 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
+      <button onClick={openMenu} className={classes["profile-btn"]}>
+        <img className={classes.menu} src={menu} alt="" />
+        <img className={classes.profile} src={profile} alt="" />
       </button>
       <div className={classes.dropdown}>
         <ul
@@ -55,28 +58,44 @@ function ProfileButton({ user }) {
         >
           {user ? (
             <>
-              <li>{user.username}</li>
-              <li>
-                {user.firstName} {user.lastName}
+              <li className={classes.trip}>
+                <Link className={classes.trips} to="/trips">
+                  Trips
+                </Link>
               </li>
-              <li>{user.email}</li>
-              <li>
+              <div className={classes.divider}></div>
+              <li className={classes.user}>
+                <Link className={classes.host} to="/hosting">
+                  Manage you listings
+                </Link>
+              </li>
+              <div className={classes.divider}></div>
+              <li className={classes.logout}>
                 <button onClick={logoutHandler}>Log Out</button>
               </li>
-              <Link to="/trips">Trips</Link>
             </>
           ) : (
             <>
-              <OpenModalMenuItem
-                itemText="Log In"
-                onItemClick={closeMenu}
-                modalComponent={<LoginFormModal />}
-              />
-              <OpenModalMenuItem
-                itemText="Sign Up"
-                onItemClick={closeMenu}
-                modalComponent={<SignupFormModal />}
-              />
+              <div className={classes.modals}>
+                <OpenModalMenuItem
+                  itemText="Log In"
+                  onItemClick={closeMenu}
+                  modalComponent={<LoginFormModal />}
+                />
+                <OpenModalMenuItem
+                  itemText="Sign Up"
+                  onItemClick={closeMenu}
+                  modalComponent={<SignupFormModal />}
+                />
+              </div>
+              <div className={classes.divider}></div>
+              <div className={classes.host}>
+                <OpenModalMenuItem
+                  className="host"
+                  itemText="Airbnb your home"
+                  modalComponent={<LoginFormModal />}
+                />
+              </div>
             </>
           )}
         </ul>

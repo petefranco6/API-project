@@ -1,20 +1,27 @@
 nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-left: 5%;
-    padding-right: 5%;
-    border-top: solid black;
-    border-bottom: solid black;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5%;
+  padding-right: 5%;
+  border-top: 1.5px solid lightgray;
+  border-bottom: 1.5px solid lightgray;
+  margin-bottom: 20px;
+  max-height: 70px;
 }
 
 .home {
-    max-width: 100px;
+  max-width: 100px;
 }
 
-ul {
-    list-style: none;
-    display: flex;
-    gap: 10px;
+.nav-right {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.host {
+    text-decoration: none;
+    color: inherit;
 }
