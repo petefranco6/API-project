@@ -19,6 +19,7 @@ const UserHomesPage = () => {
         modalComponent={<CreateSpotFormModal />}
       />
       <div>
+        {ownedSpots.length < 1 && <h1>No listings yet!</h1>}
         {ownedSpots.map((spot) => (
           <OwnedSpotItem details={spot} key={spot.id} />
         ))}

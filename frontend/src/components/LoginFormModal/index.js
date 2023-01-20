@@ -24,7 +24,7 @@ function LoginFormModal() {
   };
 
   return (
-    <div className={classes.container}>
+    <>
       <form onSubmit={handleSubmit} className={classes["form-container"]}>
         <div className={classes.header}>
           <img alt="" src={close} className={classes["close-icon"]} />
@@ -56,7 +56,7 @@ function LoginFormModal() {
           Log In
         </button>
       </form>
-    </div>
+    </>
   );
 }
 

@@ -59,13 +59,13 @@ function ProfileButton({ user }) {
           {user ? (
             <>
               <li className={classes.trip}>
-                <Link className={classes.trips} to="/trips">
+                <Link onClick={closeMenu} className={classes.trips} to="/trips">
                   Trips
                 </Link>
               </li>
               <div className={classes.divider}></div>
               <li className={classes.user}>
-                <Link className={classes.host} to="/hosting">
+                <Link onClick={closeMenu} className={classes.host} to="/hosting">
                   Manage you listings
                 </Link>
               </li>
@@ -93,6 +93,7 @@ function ProfileButton({ user }) {
                 <OpenModalMenuItem
                   className="host"
                   itemText="Airbnb your home"
+                  onItemClick={closeMenu}
                   modalComponent={<LoginFormModal />}
                 />
               </div>

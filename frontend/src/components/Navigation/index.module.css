@@ -7,11 +7,12 @@ nav {
   border-top: 1.5px solid lightgray;
   border-bottom: 1.5px solid lightgray;
   margin-bottom: 20px;
-  max-height: 70px;
+  max-height: 80px;
 }
 
 .home {
-  max-width: 100px;
+  max-width: 150px;
+  padding: 10px;
 }
 
 .nav-right {
