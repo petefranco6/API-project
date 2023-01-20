@@ -88,7 +88,7 @@ router.delete(
       await req.entity.destroy();
     } else {
       const err = new Error(
-        "Bookings that have been started can't be deleted."
+        "Bookings that have started can't be deleted."
       );
       err.status = 403;
       return next(err);

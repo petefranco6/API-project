@@ -1,3 +1,94 @@
 .hidden {
-    display: none;
+  display: none;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 2rem);
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  gap: 10px;
+  width: 250px;
+  border-radius: 10px;
+  list-style: none;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px;
+  background-color: white;
+  border-radius: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: none;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+}
+
+.menu {
+  max-width: 15px;
+  margin-left: 5px;
+}
+
+.profile {
+  max-width: 35px;
+}
+
+.host {
+  text-decoration: none;
+  color: inherit;
+}
+
+.divider {
+  border: 1px solid lightgray;
+  padding: 0;
+  margin: 0;
+}
+
+li a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: .5rem
+}
+
+.dropdown-menu li:hover {
+  background-color: #f0eeea;
+}
+
+.dropdown-menu li {
+  cursor: pointer;
+  height: 30px;
+}
+
+.trip {
+  border-radius: 10px 10px 0px 0px;
+}
+
+.logout {
+  border-radius: 0px 0px 10px 10px;
+}
+
+.logout button {
+  width: 100%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  text-align: left;
+  padding: .5rem;
+}
+
+.modals li, .host li {
+  padding: .5rem;
 }

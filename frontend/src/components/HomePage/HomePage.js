@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSpots } from "../../store/spots";
+import * as spotsActions from "../../store/spots";
+import SpotItem from "../SpotItem.js/SpotItem";
+import classes from "./HomePage.module.css";
 
 const HomePage = () => {
     const dispatch = useDispatch();
     const allSpots = useSelector(state => state.spots.spots)
 
     useEffect(() => {
-        dispatch(getAllSpots())
+        dispatch(spotsActions.getAllSpots());
     }, [dispatch])
 
     return (
-        <div>
-            <ul>
-                {allSpots.map(spot => <li key={spot.id}>{spot.name}</li>)}
-            </ul>
+        <div className={classes.container}>
+            {allSpots.map(spot => <SpotItem key={spot.id} details={spot} />)}
         </div>
     );
 }

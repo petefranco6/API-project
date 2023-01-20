@@ -1,0 +1,16 @@
+.images img {
+    width: 400px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    width: 400px;
+    padding: 20px;
+  }
+
+.reserve {
+    background-color: #d70f5f;
+    color: white;
+}

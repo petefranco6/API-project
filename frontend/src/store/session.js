@@ -1,31 +1,64 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { csrfFetch } from "./csrf";
 
-export const login = createAsyncThunk(
-  "/api/session/login",
-  async (user, thunkAPI) => {
-    const { credential, password } = user;
-    const response = await csrfFetch("/api/session", {
-      method: "POST",
-      body: JSON.stringify({
-        credential,
-        password,
-      }),
-    });
+const SET_USER = 'session/setUser';
+const REMOVE_USER = 'session/removeUser';
 
-    const data = await response.json();
-    return data;
-  }
-);
+const setUser = (user) => {
+  return {
+    type: SET_USER,
+    payload: user,
+  };
+};
 
-export const restoreUser = createAsyncThunk("/api/session/restore-user", async () => {
-  const response = await csrfFetch("/api/session");
+const removeUser = () => {
+  return {
+    type: REMOVE_USER,
+  };
+};
+
+export const login = (user) => async (dispatch) => {
+  const { credential, password } = user;
+  const response = await csrfFetch('/api/session', {
+    method: 'POST',
+    body: JSON.stringify({
+      credential,
+      password,
+    }),
+  });
   const data = await response.json();
+  dispatch(setUser(data.user));
+  return response;
+};
 
-  return data;
-});
+// export const restoreUser = createAsyncThunk("/api/session/restore-user", async () => {
+//   const response = await csrfFetch("/api/session");
+//   const data = await response.json();
 
-export const signup = createAsyncThunk("/api/users/signup", async (user) => {
+//   return data;
+// });
+export const restoreUser = () => async dispatch => {
+  const response = await csrfFetch('/api/session');
+  const data = await response.json();
+  dispatch(setUser(data.user));
+  return response;
+};
+
+// export const signup = createAsyncThunk("/api/users/signup", async (user) => {
+//   const { username, firstName, lastName, email, password } = user;
+//   const response = await csrfFetch("/api/users", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       username,
+//       firstName,
+//       lastName,
+//       email,
+//       password,
+//     }),
+//   });
+//   const data = await response.json();
+//   return data;
+// });
+export const signup = (user) => async (dispatch) => {
   const { username, firstName, lastName, email, password } = user;
   const response = await csrfFetch("/api/users", {
     method: "POST",
@@ -38,45 +71,41 @@ export const signup = createAsyncThunk("/api/users/signup", async (user) => {
     }),
   });
   const data = await response.json();
-  return data;
-});
+  dispatch(setUser(data.user));
+  return response;
+};
 
-export const logout = createAsyncThunk("/api/session/logout", async () => {
-    const response = await csrfFetch("/api/session", {
-        method: "DELETE"
-    });
+// export const logout = createAsyncThunk("/api/session/logout", async () => {
+//     const response = await csrfFetch("/api/session", {
+//         method: "DELETE"
+//     });
 
-    const data = await response.json();
-    return data
-})
+//     const data = await response.json();
+//     return data
+// })
+export const logout = () => async (dispatch) => {
+  const response = await csrfFetch('/api/session', {
+    method: 'DELETE',
+  });
+  dispatch(removeUser());
+  return response;
+};
 
-const sessionSlice = createSlice({
-  name: "session",
-  initialState: { user: null },
-  reducers: {
-    setUser(state, action) {
-      state.user = action.payload;
-    },
-    removeUser(state) {
-      state.user = null;
-    },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-    });
-    builder.addCase(restoreUser.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-    });
-    builder.addCase(signup.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
-        state.user = null;
-      });
-  },
-});
+const sessionReducer = (state = { user: null }, action) => {
+  let newState;
+  switch (action.type) {
+    case SET_USER:
+      newState = Object.assign({}, state);
+      newState.user = action.payload;
+      return newState;
+    case REMOVE_USER:
+      newState = Object.assign({}, state);
+      newState.user = null;
+      return newState;
+    default:
+      return state;
+  }
+};
 
-export const sessionActions = sessionSlice.actions;
 
-export default sessionSlice.reducer;
+export default sessionReducer;
