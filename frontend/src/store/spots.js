@@ -192,7 +192,7 @@ const spotsReducer = (state = { spots: [], spot: {} }, action) => {
       return {
         ...state,
         spots: state.spots.map((spot) =>
-          spot.id === action.payload.id ? (spot = action.payload) : spot
+          spot.id === action.payload.id ? (spot = {...spot,...action.payload}) : spot
         ),
       };
     case REMOVE_SPOT:

@@ -1,0 +1,12 @@
+.container {
+    margin-right: 100px;
+    margin-left: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.welcome {
+    display: flex;
+    justify-content: space-between;
+}

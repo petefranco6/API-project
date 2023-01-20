@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as spotsActions from "../../store/spots";
-
-function EditSpotFormModal({details}) {
+import classes from "./EditSpotFormModal.module.css";
+import close from "../../icons/close.png";
+function EditSpotFormModal({ details }) {
   const dispatch = useDispatch();
   const [address, setAddress] = useState(details.address);
   const [city, setCity] = useState(details.city);
@@ -28,7 +29,7 @@ function EditSpotFormModal({details}) {
         description,
         name,
         price,
-        id: details.id
+        id: details.id,
       })
     )
       .then(closeModal)
@@ -40,77 +41,63 @@ function EditSpotFormModal({details}) {
 
   return (
     <>
-      <h1>Edit Listing</h1>
-      <form onSubmit={handleSubmit}>
-        <ul>
-          {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
-          ))}
-        </ul>
-        <label>
-          Address
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          City
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          State
-          <input
-            type="text"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Country
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Description
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Name
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Price
-          <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Edit listing</button>
+      <form className={classes.container} onSubmit={handleSubmit}>
+        <div className={classes.header}>
+          <img alt="" src={close} className={classes["close-icon"]} />
+          <h3>Edit Listing</h3>
+        </div>
+        <div className={classes.divider}></div>
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((error, idx) => (
+              <li key={idx}>{error}</li>
+            ))}
+          </ul>
+        )}
+
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+        <button className={classes.edit} type="submit">Edit</button>
       </form>
     </>
   );

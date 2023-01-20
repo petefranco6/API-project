@@ -2,6 +2,8 @@ import { useState } from "react";
 import * as spotsActions from "../../store/spots";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import classes from "./CreateSpotFormModal.module.css";
+import close from "../../icons/close.png";
 
 function CreateSpotFormModal() {
   const dispatch = useDispatch();
@@ -11,16 +13,28 @@ function CreateSpotFormModal() {
   const [country, setCountry] = useState("");
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("")
-  const [url, setUrl] = useState("")
-  const [preview, setPreview] = useState(true)
+  const [price, setPrice] = useState("");
+  const [url, setUrl] = useState("");
+  const [preview, setPreview] = useState(true);
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    return dispatch(spotsActions.createSpot({ address, city, state, country, description, name, price, url, preview }))
+    return dispatch(
+      spotsActions.createSpot({
+        address,
+        city,
+        state,
+        country,
+        description,
+        name,
+        price,
+        url,
+        preview,
+      })
+    )
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
@@ -30,87 +44,78 @@ function CreateSpotFormModal() {
 
   return (
     <>
-      <h1>Add Listing</h1>
-      <form onSubmit={handleSubmit}>
-        <ul>
-          {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
-          ))}
-        </ul>
-        <label>
-          Address
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          City
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          State
-          <input
-            type="text"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Country
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Description
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Name
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Price
-          <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Image Url
-          <input
-            alt=""
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Create listing</button>
+      <form className={classes.container} onSubmit={handleSubmit}>
+        <div className={classes.header}>
+          <img alt="" src={close} className={classes["close-icon"]} />
+          <h3>Add Listing</h3>
+        </div>
+        <div className={classes.divider}></div>
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((error, idx) => (
+              <li key={idx}>{error}</li>
+            ))}
+          </ul>
+        )}
+
+        <input
+          type="text"
+          placeholder="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="City"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="State"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+        <input
+          alt=""
+          placeholder="Image Url"
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          required
+        />
+        <button className={classes.create} type="submit">Create</button>
       </form>
     </>
   );

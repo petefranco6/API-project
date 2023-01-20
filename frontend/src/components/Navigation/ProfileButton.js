@@ -5,13 +5,14 @@ import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import profile from "../../icons/profile.png";
 import menu from "../../icons/menu.png";
 
 import classes from "./ProfileButton.module.css";
 
 function ProfileButton({ user }) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
@@ -41,6 +42,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    history.replace("/");
   };
 
   return (
@@ -66,7 +68,7 @@ function ProfileButton({ user }) {
               <div className={classes.divider}></div>
               <li className={classes.user}>
                 <Link onClick={closeMenu} className={classes.host} to="/hosting">
-                  Manage you listings
+                  Manage your listings
                 </Link>
               </li>
               <div className={classes.divider}></div>

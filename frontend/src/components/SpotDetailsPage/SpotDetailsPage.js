@@ -25,6 +25,9 @@ const SpotDetailsPage = () => {
 
   return (
     <div>
+      <div className={classes.images}>
+        { spot.spotImages && spot.spotImages.map(spotImg => <img key={spotImg.id} alt="" src={spotImg.url} />)}
+      </div>
       <div className={classes.card}>
         <form onSubmit={handleSubmit}>
           <label>
@@ -45,7 +48,7 @@ const SpotDetailsPage = () => {
             required
             />
           </label>
-          <button type="submit"> Reserve </button>
+          <button className={classes.reserve} type="submit"> Reserve </button>
         </form>
       </div>
     </div>

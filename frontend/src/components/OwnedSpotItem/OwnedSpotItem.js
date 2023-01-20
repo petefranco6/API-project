@@ -2,6 +2,7 @@ import OpenModalButton from "../OpenModalButton";
 import EditSpotFormModal from "../EditSpotFormModal/EditSpotFormModal";
 import { useDispatch } from "react-redux";
 import * as spotsActions from "../../store/spots";
+import SpotItem from "../SpotItem.js/SpotItem";
 
 const OwnedSpotItem = ({ details }) => {
     const dispatch = useDispatch();
@@ -11,8 +12,7 @@ const OwnedSpotItem = ({ details }) => {
     }
   return (
     <div>
-      <div>{details.name}</div>
-      <div>{details.id}</div>
+      <SpotItem details={details} />
       <OpenModalButton
         buttonText="Edit"
         modalComponent={<EditSpotFormModal details={details} />}
