@@ -22,15 +22,63 @@ module.exports = {
    await queryInterface.bulkInsert(options, [
     {
       ownerId: 1,
+      address: "12 Red street",
+      city: "Houston",
+      state: "Texas",
+      country: "United States",
+      lat: 12.1,
+      lng: 12.1,
+      name: "Cool House1",
+      description: "This is a cool house!",
+      price: 1006
+    },
+    {
+      ownerId: 1,
+      address: "123 Red street",
+      city: "Houston",
+      state: "Texas",
+      country: "United States",
+      lat: 12.1,
+      lng: 12.1,
+      name: "Cool House2",
+      description: "This is a cool house!",
+      price: 1007
+    },
+    {
+      ownerId: 1,
       address: "1234 Red street",
       city: "Houston",
       state: "Texas",
       country: "United States",
       lat: 12.1,
       lng: 12.1,
-      name: "Cool House",
+      name: "Cool House3",
       description: "This is a cool house!",
-      price: 100
+      price: 1000
+    },
+    {
+      ownerId: 2,
+      address: "12 Blue avenue",
+      city: "Austin",
+      state: "Texas",
+      country: "United States",
+      lat: 20.1,
+      lng: 20.1,
+      name: "meh House 1",
+      description: "This is a meh house!",
+      price: 200
+    },
+    {
+      ownerId: 2,
+      address: "123 Blue avenue",
+      city: "Austin",
+      state: "Texas",
+      country: "United States",
+      lat: 20.1,
+      lng: 20.1,
+      name: "meh House",
+      description: "This is a meh house!",
+      price: 20
     },
     {
       ownerId: 2,
@@ -40,21 +88,45 @@ module.exports = {
       country: "United States",
       lat: 20.1,
       lng: 20.1,
-      name: "Cool House",
-      description: "This is a cool house!",
-      price: 200
+      name: "meh House",
+      description: "This is a meh house!",
+      price: 2
     },
     {
       ownerId: 3,
-      address: "1234 Green Road",
-      city: "Houston",
+      address: "12 Green Road",
+      city: "Dallas",
       state: "Texas",
       country: "United States",
       lat: 100.1,
       lng: 100.1,
       name: "Cool House",
       description: "This is a REALLY cool house!",
-      price: 2000
+      price: 20
+    },
+    {
+      ownerId: 3,
+      address: "123 Green Road",
+      city: "Dallas",
+      state: "Texas",
+      country: "United States",
+      lat: 100.1,
+      lng: 100.1,
+      name: "Cool House",
+      description: "This is a REALLY cool house!",
+      price: 200
+    },
+    {
+      ownerId: 3,
+      address: "1234 Green Road",
+      city: "Dallas",
+      state: "Texas",
+      country: "United States",
+      lat: 100.1,
+      lng: 100.1,
+      name: "nice House",
+      description: "This is a REALLY nice house!",
+      price: 20000
     },
    ], {})
   },
