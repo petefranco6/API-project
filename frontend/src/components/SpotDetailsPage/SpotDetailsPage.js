@@ -48,7 +48,8 @@ const SpotDetailsPage = () => {
       .filter((spotImg) => spotImg.preview !== true)
       .map((spotImg) => <img key={spotImg.id} alt="" src={spotImg.url} />);
 
-    stars = spot.avgStarRating.toFixed(1);
+    stars = Math.round(parseInt(spot.avgStarRating) * 1e8) / 1e8;
+
   }
 
   if (spot.numReviews > 0) {
