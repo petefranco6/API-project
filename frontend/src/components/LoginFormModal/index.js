@@ -31,13 +31,13 @@ function LoginFormModal() {
           <h3>Log In</h3>
         </div>
         <div className={classes.divider}></div>
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error, idx) => (
-              <li key={idx}>{error}</li>
-            ))}
-          </ul>
-        )}
+
+        <ul>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
+
         <input
           placeholder="Email or Username"
           type="text"

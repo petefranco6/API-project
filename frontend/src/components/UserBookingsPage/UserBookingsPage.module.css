@@ -12,7 +12,7 @@
     margin: 0;
   }
 
-.no-trips p, a {
+  .no-trips p, .no-trips a {
     padding-top: .5rem;
     padding-bottom: 1rem;
 }
@@ -28,4 +28,19 @@
     height: 45px;
     align-items: center;
     justify-content: center;
+}
+
+.title {
+    position: relative;
+}
+
+.delete-icon {
+    position: absolute;
+    right: 50px;
+    top: -10px;
+    cursor: pointer;
+}
+
+.delete-icon img {
+    width: 90%;
 }
