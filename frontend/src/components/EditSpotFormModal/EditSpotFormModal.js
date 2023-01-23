@@ -43,7 +43,7 @@ function EditSpotFormModal({ details }) {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} />
+          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
           <h3>Edit Listing</h3>
         </div>
         <div className={classes.divider}></div>

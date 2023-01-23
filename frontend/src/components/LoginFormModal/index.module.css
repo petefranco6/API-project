@@ -41,4 +41,9 @@
 
 .close-icon {
     width: 20px;
+    cursor: pointer;
+}
+
+.errors-list li{
+  list-style: none;
 }

@@ -1,6 +1,15 @@
 .host {
     background-color: white;
     border: none;
+    cursor: pointer;
+    height: 40px;
+    padding: .5rem;
+    border-radius: 1rem;
+    text-decoration: none;
+}
+
+.host:hover {
+    background-color: rgb(244, 242, 242);
 }
 
 .edit-listing {

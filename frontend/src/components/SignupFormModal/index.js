@@ -45,12 +45,12 @@ function SignupFormModal() {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} />
+          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
           <h3>Sign Up</h3>
         </div>
         <div className={classes.divider}></div>
         {errors.length > 0 && (
-          <ul>
+          <ul className={classes["errors-list"]}>
             {errors.map((error, idx) => (
               <li key={idx}>{error}</li>
             ))}

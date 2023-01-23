@@ -25,4 +25,11 @@ nav {
 .host {
     text-decoration: none;
     color: inherit;
+    height: 40px;
+    padding: .5rem;
+    border-radius: 1rem;
+}
+
+.host:hover {
+  background-color: rgb(244, 242, 242);
 }

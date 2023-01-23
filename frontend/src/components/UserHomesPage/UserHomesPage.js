@@ -10,11 +10,13 @@ import deleteIcon from "../../icons/delete.png";
 const UserHomesPage = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.session.user);
-  const ownedSpots = useSelector((state) => state.spots.spots);
+  const ownedSpots = useSelector((state) => state.spots.ownedSpots);
   const [checkedItems, setCheckedItems] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     dispatch(spotsActions.getOwnedSpots());
+    setIsLoading(false);
   }, [dispatch]);
 
   const handleCheckboxChange = (e) => {
@@ -44,16 +46,18 @@ const UserHomesPage = () => {
         </div>
       </div>
       <div className={classes.divider}></div>
-      {ownedSpots.length < 1 && <h1>No listings yet!</h1>}
       <ul>
-        {ownedSpots.map((spot) => (
-          <OwnedSpotItem
-            details={spot}
-            key={spot.id}
-            handleCheckboxChange={handleCheckboxChange}
-          />
-        ))}
+        {!isLoading && ownedSpots.length > 0 &&
+          ownedSpots.map((spot) => (
+            <OwnedSpotItem
+              details={spot}
+              key={spot.id}
+              handleCheckboxChange={handleCheckboxChange}
+            />
+          ))}
       </ul>
+      {isLoading && ownedSpots.length === 0 && <h1>No listings yet!</h1> }
+      {isLoading && <h1>Loading....</h1>}
     </div>
   );
 };

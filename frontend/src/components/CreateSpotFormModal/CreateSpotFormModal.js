@@ -46,12 +46,12 @@ function CreateSpotFormModal() {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} />
+          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
           <h3>Add Listing</h3>
         </div>
         <div className={classes.divider}></div>
         {errors.length > 0 && (
-          <ul>
+          <ul className={classes["error-list"]}>
             {errors.map((error, idx) => (
               <li key={idx}>{error}</li>
             ))}
@@ -110,7 +110,7 @@ function CreateSpotFormModal() {
         <input
           alt=""
           placeholder="Image Url"
-          type="text"
+          type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           required

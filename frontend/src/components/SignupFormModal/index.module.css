@@ -30,6 +30,7 @@
 
   .close-icon {
       width: 20px;
+      cursor: pointer;
   }
 
   .signup {
@@ -40,4 +41,8 @@
     font-size: 20px;
     border: none;
     text-align: center;
+  }
+
+  .errors-list li{
+    list-style: none;
   }
