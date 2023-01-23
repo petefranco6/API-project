@@ -27,12 +27,12 @@ function LoginFormModal() {
     <>
       <form onSubmit={handleSubmit} className={classes["form-container"]}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} />
+          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
           <h3>Log In</h3>
         </div>
         <div className={classes.divider}></div>
 
-        <ul>
+        <ul className={classes["errors-list"]}>
           {errors.map((error, idx) => (
             <li key={idx}>{error}</li>
           ))}

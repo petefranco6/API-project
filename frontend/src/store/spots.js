@@ -164,7 +164,7 @@ export const deleteSpot = (spotId) => async (dispatch) => {
   return response;
 };
 
-const spotsReducer = (state = { spots: [], spot: {} }, action) => {
+const spotsReducer = (state = { spots: [], spot: {}, ownedSpots:[] }, action) => {
   switch (action.type) {
     case POPULATE_SPOTS:
       return {
@@ -179,7 +179,7 @@ const spotsReducer = (state = { spots: [], spot: {} }, action) => {
     case POPULATE_OWNED_SPOTS:
       return {
         ...state,
-        spots: action.payload.spots,
+        ownedSpots: action.payload.spots,
       };
     case ADD_SPOT:
       return {

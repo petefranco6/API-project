@@ -30,6 +30,7 @@
 
   .close-icon {
     width: 20px;
+    cursor: pointer;
   }
 
   .create {
@@ -40,4 +41,8 @@
     font-size: 20px;
     border: none;
     text-align: center;
+  }
+
+  .error-list {
+    list-style: none;
   }

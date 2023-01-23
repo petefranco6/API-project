@@ -24,6 +24,7 @@
 
 .booking-img img {
     height: 100%;
+    border-radius: 20px
 }
 
 .checkbox-booking {

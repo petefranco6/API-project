@@ -28,7 +28,7 @@ const UserBookingsPage = () => {
     <div className={classes["no-trips"]}>
       <h2>No trips booked...yet!</h2>
       <p>Time to dust off your bags and start planning your next adventure</p>
-      <Link to="/">Start searching</Link>
+      <Link className={classes.search} to="/">Start searching</Link>
       <div className={classes.divider}></div>
     </div>
   );
