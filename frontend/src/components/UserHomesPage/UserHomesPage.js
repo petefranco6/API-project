@@ -28,6 +28,14 @@ const UserHomesPage = () => {
     }));
   };
 
+  const deleteSpotsSelectedHandler = () => {
+    for(const key in checkedItems) {
+      if(checkedItems[key] === true) {
+        dispatch(spotsActions.deleteSpot(key))
+      }
+    }
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.welcome}>
@@ -35,7 +43,7 @@ const UserHomesPage = () => {
         <div className={classes["delete-multiple"]}>
           <div className={classes["delete-icon"]}>
             {Object.values(checkedItems).some((value) => value) && (
-              <img alt="" src={deleteIcon} />
+              <img alt="" src={deleteIcon} onClick={deleteSpotsSelectedHandler} />
             )}
           </div>
           <OpenModalButton
