@@ -86,6 +86,66 @@ module.exports = {
       url: 'https://images.pexels.com/photos/1571467/pexels-photo-1571467.jpeg?auto=compress&cs=tinysrgb&w=1600',
       preview: false
     },
+    {
+      spotId: 4,
+      url: 'https://images.pexels.com/photos/259685/pexels-photo-259685.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: true
+    },
+    {
+      spotId: 4,
+      url: 'https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: false
+    },
+    {
+      spotId: 4,
+      url: 'https://images.pexels.com/photos/20943/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1600',
+      preview: false
+    },
+    {
+      spotId: 4,
+      url: 'https://images.pexels.com/photos/259962/pexels-photo-259962.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: false
+    },
+    {
+      spotId: 5,
+      url: 'https://images.pexels.com/photos/463734/pexels-photo-463734.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: true
+    },
+    {
+      spotId: 5,
+      url: 'https://images.pexels.com/photos/1669799/pexels-photo-1669799.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: false
+    },
+    {
+      spotId: 5,
+      url: 'https://images.pexels.com/photos/242827/pexels-photo-242827.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: false
+    },
+    {
+      spotId: 6,
+      url: 'https://images.pexels.com/photos/2104151/pexels-photo-2104151.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: true
+    },
+    {
+      spotId: 6,
+      url: 'https://images.pexels.com/photos/877971/pexels-photo-877971.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: false
+    },
+    {
+      spotId: 7,
+      url: 'https://images.pexels.com/photos/262405/pexels-photo-262405.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: true
+    },
+    {
+      spotId: 8,
+      url: 'https://images.pexels.com/photos/463996/pexels-photo-463996.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: true
+    },
+    {
+      spotId: 9,
+      url: 'https://images.pexels.com/photos/221024/pexels-photo-221024.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      preview: true
+    },
    ])
   },
 

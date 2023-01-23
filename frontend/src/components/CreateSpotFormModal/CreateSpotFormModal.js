@@ -107,7 +107,8 @@ function CreateSpotFormModal() {
           required
         />
         <input
-          type="text"
+          type="number"
+          min={1}
           placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
