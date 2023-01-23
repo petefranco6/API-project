@@ -71,7 +71,7 @@ const bookingsReducer = (state = { bookings: [] }, action) => {
       return {
         ...state,
         bookings: state.bookings.filter(
-          (booking) => booking.id !== action.payload
+          (booking) => booking.id !== parseInt(action.payload)
         ),
       };
     case ADD_BOOKING:

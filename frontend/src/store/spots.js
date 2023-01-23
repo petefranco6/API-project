@@ -110,10 +110,10 @@ export const createSpot = (newSpot) => async (dispatch, getState) => {
 
   dispatch(addToSpots(data));
 
-  const spots = getState().spots.spots;
-  const spot = spots[spots.length - 1];
+  const ownedSpots = getState().spots.ownedSpots;
+  const ownedSpot = ownedSpots[ownedSpots.length - 1];
 
-  const responseImg = await csrfFetch(`/api/spots/${spot.id}/images`, {
+  const responseImg = await csrfFetch(`/api/spots/${ownedSpot.id}/images`, {
     method: "POST",
     body: JSON.stringify({
       url,
@@ -186,24 +186,24 @@ const spotsReducer = (state = { spots: [], spot: {}, ownedSpots:[] }, action) =>
         // returning a copy of orignal state
         ...state,
         //copying the original state
-        spots: [...state.spots, action.payload],
+        ownedSpots: [...state.ownedSpots, action.payload],
       };
     case EDIT_SPOT:
       return {
         ...state,
-        spots: state.spots.map((spot) =>
+        ownedSpots: state.ownedSpots.map((spot) =>
           spot.id === action.payload.id ? (spot = {...spot,...action.payload}) : spot
         ),
       };
     case REMOVE_SPOT:
       return {
         ...state,
-        spots: state.spots.filter((spot) => spot.id !== action.payload),
+        ownedSpots: state.ownedSpots.filter((spot) => spot.id !== parseInt(action.payload)),
       };
     case ADD_IMG:
       return {
         ...state,
-        spots: state.spots.map((spot) =>
+        ownedSpots: state.ownedSpots.map((spot) =>
           spot.id === action.payload.id ? (spot = action.payload) : spot
         ),
       };

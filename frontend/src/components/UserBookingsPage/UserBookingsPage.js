@@ -24,6 +24,14 @@ const UserBookingsPage = () => {
     }));
   };
 
+  const deleteBookingsSelectedHandler = () => {
+    for(const key in checkedItems) {
+      if(checkedItems[key] === true) {
+        dispatch(bookingsActions.deleteBooking(key))
+      }
+    }
+  }
+
   const noBookingsContent = (
     <div className={classes["no-trips"]}>
       <h2>No trips booked...yet!</h2>
@@ -39,7 +47,7 @@ const UserBookingsPage = () => {
         <h1>Trips</h1>
         {Object.values(checkedItems).some((value) => value) && (
           <div className={classes["delete-icon"]}>
-            <img alt="" src={deleteIcon} />
+            <img alt="" src={deleteIcon} onClick={deleteBookingsSelectedHandler} />
           </div>
         )}
       </div>

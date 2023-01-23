@@ -46,7 +46,12 @@ function CreateSpotFormModal() {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
+          <img
+            alt=""
+            src={close}
+            className={classes["close-icon"]}
+            onClick={closeModal}
+          />
           <h3>Add Listing</h3>
         </div>
         <div className={classes.divider}></div>
@@ -89,6 +94,7 @@ function CreateSpotFormModal() {
         <input
           type="text"
           placeholder="Description"
+          maxLength="35"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
@@ -115,7 +121,9 @@ function CreateSpotFormModal() {
           onChange={(e) => setUrl(e.target.value)}
           required
         />
-        <button className={classes.create} type="submit">Create</button>
+        <button className={classes.create} type="submit">
+          Create
+        </button>
       </form>
     </>
   );
