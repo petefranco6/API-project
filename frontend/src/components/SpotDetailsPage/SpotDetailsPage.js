@@ -1,4 +1,4 @@
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as spotsActions from "../../store/spots";
@@ -10,8 +10,8 @@ const SpotDetailsPage = () => {
   const dispatch = useDispatch();
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
+  const [errors, setErrors] = useState([]);
   const spot = useSelector((state) => state.spots.spot);
-  const history = useHistory()
 
   useEffect(() => {
     dispatch(spotsActions.getSpotDetails(params.spotId));
@@ -21,8 +21,14 @@ const SpotDetailsPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(bookingsActions.createBooking({ checkin, checkout, spotId }))
-    history.push("/")
+    setErrors([]);
+    dispatch(
+      bookingsActions.createBooking({ checkin, checkout, spotId })
+      )
+      .catch(async (res) => {
+      const data = await res.json();
+      if (data.errors) setErrors(data.errors);
+    });
   };
 
   let imagePreview;
@@ -49,7 +55,6 @@ const SpotDetailsPage = () => {
       .map((spotImg) => <img key={spotImg.id} alt="" src={spotImg.url} />);
 
     stars = Math.round(parseInt(spot.avgStarRating) * 1e8) / 1e8;
-
   }
 
   if (spot.numReviews > 0) {
@@ -86,8 +91,7 @@ const SpotDetailsPage = () => {
 
             {spot.avgStarRating && (
               <p>
-                <i className="fa-solid fa-star"></i> {stars} - $
-                {numOfReviews}
+                <i className="fa-solid fa-star"></i> {stars} - ${numOfReviews}
               </p>
             )}
           </div>
@@ -111,6 +115,11 @@ const SpotDetailsPage = () => {
             <button className={"reserve"} type="submit">
               Reserve
             </button>
+            <ul className="errors-list">
+              {errors.map((error, idx) => (
+                <li key={idx}>{error}</li>
+              ))}
+            </ul>
           </form>
           <div className="reserve-info-calc">
             <p>You won't be charged yet</p>

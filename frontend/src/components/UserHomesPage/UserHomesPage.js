@@ -64,7 +64,7 @@ const UserHomesPage = () => {
             />
           ))}
       </ul>
-      {isLoading && ownedSpots.length === 0 && <h1>No listings yet!</h1> }
+      {!isLoading && ownedSpots.length === 0 && <h1>No listings yet!</h1> }
       {isLoading && <h1>Loading....</h1>}
     </div>
   );

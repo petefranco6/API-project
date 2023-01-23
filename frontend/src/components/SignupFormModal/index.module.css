@@ -8,8 +8,9 @@
 
   .container input {
     height: 50px;
-    border-radius: 10px;
+    border-radius: 4px;
     padding: 4px;
+    border: 1px solid lightgrey ;
   }
 
 .header {
@@ -45,4 +46,13 @@
 
   .errors-list li{
     list-style: none;
+  }
+
+  .name, .password, .credentials {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .first, .username, .password1 {
+    border-bottom: none;
   }
