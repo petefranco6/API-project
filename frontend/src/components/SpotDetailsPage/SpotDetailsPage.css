@@ -188,8 +188,12 @@
   font-weight:900;
 }
 
+.errors-list li{
+  list-style: none;
+}
 
-@media (width < 1024px) {
+
+@media (width < 1580px) {
   .preview-false {
     display: none;
   }

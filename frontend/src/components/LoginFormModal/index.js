@@ -19,15 +19,29 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
+        if (data.errors) {
+          setErrors(data.errors);
+        }
+
       });
+  };
+
+  const demoLoginHandler = () => {
+    dispatch(
+      sessionActions.login({ credential: "Demo-lition", password: "password" })
+    ).then(closeModal);
   };
 
   return (
     <>
       <form onSubmit={handleSubmit} className={classes["form-container"]}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
+          <img
+            alt=""
+            src={close}
+            className={classes["close-icon"]}
+            onClick={closeModal}
+          />
           <h3>Log In</h3>
         </div>
         <div className={classes.divider}></div>
@@ -54,6 +68,13 @@ function LoginFormModal() {
         />
         <button className={classes.login} type="submit">
           Log In
+        </button>
+        <button
+          type="button"
+          className={classes.login}
+          onClick={demoLoginHandler}
+        >
+          Demo User
         </button>
       </form>
     </>

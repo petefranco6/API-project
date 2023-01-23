@@ -45,7 +45,12 @@ function SignupFormModal() {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
+          <img
+            alt=""
+            src={close}
+            className={classes["close-icon"]}
+            onClick={closeModal}
+          />
           <h3>Sign Up</h3>
         </div>
         <div className={classes.divider}></div>
@@ -59,6 +64,7 @@ function SignupFormModal() {
 
         <div className={classes.name}>
           <input
+            className={classes.first}
             placeholder="First Name"
             type="text"
             value={firstName}
@@ -73,37 +79,43 @@ function SignupFormModal() {
             required
           />
         </div>
-        <input
-          placeholder="Username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Email"
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <div className={classes.password}>
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Confirm Password"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+        <div className={classes.credentials}>
+          <input
+            className={classes.username}
+            placeholder="Username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            placeholder="Email"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
-        <button className={classes.signup} type="submit">Sign Up</button>
+        <div className={classes.password}>
+          <input
+            className={classes.password1}
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            placeholder="Confirm Password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button className={classes.signup} type="submit">
+          Sign Up
+        </button>
       </form>
     </>
   );
