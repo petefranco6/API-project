@@ -1,35 +1,59 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as bookingsActions from "../../store/bookings";
 import BookingItem from "../BookingItem/BookingItem";
 import classes from "./UserBookingsPage.module.css";
 import { Link } from "react-router-dom";
+import deleteIcon from "../../icons/delete.png";
 
 const UserBookingsPage = () => {
   const dispatch = useDispatch();
   const bookings = useSelector((state) => state.bookings.bookings);
+  const [checkedItems, setCheckedItems] = useState({});
 
   useEffect(() => {
     dispatch(bookingsActions.getCurrentBookings());
   }, [dispatch]);
 
+  const handleCheckboxChange = (e) => {
+    const item = e.target.value;
+    const isChecked = e.target.checked;
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [item]: isChecked,
+    }));
+  };
+
+  const noBookingsContent = (
+    <div className={classes["no-trips"]}>
+      <h2>No trips booked...yet!</h2>
+      <p>Time to dust off your bags and start planning your next adventure</p>
+      <Link to="/">Start searching</Link>
+      <div className={classes.divider}></div>
+    </div>
+  );
+
   return (
     <div className={classes.container}>
-      <h1>Trips</h1>
+      <div className={classes.title}>
+        <h1>Trips</h1>
+        {Object.values(checkedItems).some((value) => value) && (
+          <div className={classes["delete-icon"]}>
+            <img alt="" src={deleteIcon} />
+          </div>
+        )}
+      </div>
       <div className={classes.divider}></div>
-      {bookings.length < 1 && (
-        <div className={classes["no-trips"]}>
-          <h2>No trips booked...yet!</h2>
-          <p>
-            Time to dust off your bags and start planning your next adventure
-          </p>
-          <Link to="/">Start searching</Link>
-        </div>
-      )}
-      {bookings.map((booking) => (
-        <BookingItem details={booking} key={booking.id} />
-      ))}
-      <div className={classes.divider}></div>
+      {bookings.length === 0 && noBookingsContent}
+      <ul>
+        {bookings.map((booking) => (
+          <BookingItem
+            booking={booking}
+            key={booking.id}
+            handleCheckboxChange={handleCheckboxChange}
+          />
+        ))}
+      </ul>
     </div>
   );
 };
