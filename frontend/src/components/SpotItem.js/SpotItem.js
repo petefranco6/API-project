@@ -6,7 +6,7 @@ const SpotItem = ({ details }) => {
   let stars;
 
   if(details.avgRating) {
-    stars = details.avgRating.toFixed(1);
+    stars = Math.round(parseInt(details.avgRating) * 1e8) / 1e8;
   }
 
   return (
