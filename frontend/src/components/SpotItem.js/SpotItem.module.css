@@ -1,18 +1,22 @@
 .card {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
-  flex: 1 1 400px;
   font-size: 16px;
   text-decoration: none;
   color: black;
+  width: 100%;
+  height: 115%;
+}
+
+.img-container {
+  height: 80%;
 }
 
 .card-img {
   border-radius: 15px;
   width: 100%;
   height: 100%;
-  background-size: cover;
+  object-fit: cover;
 }
 
 .title {
@@ -20,7 +24,6 @@
   width: 100%;
   justify-content: space-between;
   padding: 5px 5px 0px 5px;
-
 }
 
 .rating {
@@ -34,43 +37,14 @@
 }
 
 .thick {
-  font-weight:100;
+  font-weight: 100;
 }
 
-.description, .price {
+.description,
+.price {
   padding: 0px 5px 5px 5px;
 }
 
 .description {
   color: gray;
-}
-
-@media screen and (min-width: 520px) {
-  .card {
-     max-width: calc(50% - 1em);
-  }
-}
-
-@media screen and (min-width: 900px) {
-  .card {
-     max-width: calc(33% - 1em);
-  }
-}
-
-@media screen and (min-width: 1125px) {
-  .card {
-     max-width: calc(25% - 1em);
-  }
-}
-
-@media screen and (min-width: 1640px) {
-  .card {
-      max-width: calc(20% - 1em);
-  }
-}
-
-@media screen and (min-width: 1840px) {
-  .card {
-      max-width: 15.7%;
-  }
 }

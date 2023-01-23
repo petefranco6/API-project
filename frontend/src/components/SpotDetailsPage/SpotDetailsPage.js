@@ -1,9 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as spotsActions from "../../store/spots";
 import * as bookingsActions from "../../store/bookings";
-import classes from "./SpotDetailsPage.module.css";
+import "./SpotDetailsPage.css";
 
 const SpotDetailsPage = () => {
   const params = useParams();
@@ -11,6 +11,7 @@ const SpotDetailsPage = () => {
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const spot = useSelector((state) => state.spots.spot);
+  const history = useHistory()
 
   useEffect(() => {
     dispatch(spotsActions.getSpotDetails(params.spotId));
@@ -20,36 +21,112 @@ const SpotDetailsPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(bookingsActions.createBooking({ checkin, checkout, spotId }));
+    dispatch(bookingsActions.createBooking({ checkin, checkout, spotId }))
+    history.push("/")
   };
 
+  let imagePreview;
+  let otherImages;
+  let numOfReviews = "New";
+  let stars;
+
+  if (spot.spotImages) {
+    imagePreview = spot.spotImages
+      .filter((spotImg) => spotImg.preview === true)
+      .map((spotImg) => (
+        <img
+          className={`preview-${spotImg.preview}`}
+          key={spotImg.id}
+          alt=""
+          src={spotImg.url}
+        />
+      ));
+  }
+
+  if (spot.spotImages) {
+    otherImages = spot.spotImages
+      .filter((spotImg) => spotImg.preview !== true)
+      .map((spotImg) => <img key={spotImg.id} alt="" src={spotImg.url} />);
+
+    stars = spot.avgStarRating.toFixed(1);
+  }
+
+  if (spot.numReviews > 0) {
+    numOfReviews = `${spot.numReviews} reviews`;
+  }
+
   return (
-    <div>
-      <div className={classes.images}>
-        { spot.spotImages && spot.spotImages.map(spotImg => <img key={spotImg.id} alt="" src={spotImg.url} />)}
+    <div className={"spot-details-container"}>
+      <div className={"info"}>
+        <h1>{spot.description}</h1>
+        <div className={"spot-details-description"}>
+          {spot.avgStarRating && (
+            <span>
+              <i className="fa-solid fa-star"></i>
+              {stars}
+            </span>
+          )}
+          <span>{numOfReviews}</span>
+          <span>{`${spot.city},${spot.state},${spot.country}`}</span>
+        </div>
       </div>
-      <div className={classes.card}>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Check-in
+      <div className="spot-details-content">
+        {spot.spotImages && (
+          <div className={`spot-images-container ${spot.spotImages.length}`}>
+            {imagePreview}
+            <div className={`preview-false ${spot.spotImages.length - 1}`}>
+              {otherImages}
+            </div>
+          </div>
+        )}
+        <div className={"reserve-date-card"}>
+          <div className="reserve-form-info">
+            <strong className="form-price-per-night">${spot.price}</strong>
+
+            {spot.avgStarRating && (
+              <p>
+                <i className="fa-solid fa-star"></i> {stars} - $
+                {numOfReviews}
+              </p>
+            )}
+          </div>
+          <form onSubmit={handleSubmit} className="reserve-form">
             <input
+              className="checkin-input"
               type="date"
               value={checkin}
               onChange={(e) => setCheckin(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Checkout
+
             <input
-            type="date"
-            value={checkout}
-            onChange={(e) => setCheckout(e.target.value)}
-            required
+              className="checkout-input"
+              type="date"
+              value={checkout}
+              onChange={(e) => setCheckout(e.target.value)}
+              required
             />
-          </label>
-          <button className={classes.reserve} type="submit"> Reserve </button>
-        </form>
+
+            <button className={"reserve"} type="submit">
+              Reserve
+            </button>
+          </form>
+          <div className="reserve-info-calc">
+            <p>You won't be charged yet</p>
+            <div className="calc-price">
+              <p>${spot.price} X 5 nights</p>
+              <p>$1000</p>
+            </div>
+            <div>
+              <p>Service fee</p>
+              <p>$243</p>
+            </div>
+            <div className="total-price">
+              <p>Total before taxes</p>
+              <p>$1000</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

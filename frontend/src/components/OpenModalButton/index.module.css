@@ -2,3 +2,26 @@
     background-color: white;
     border: none;
 }
+
+.edit-listing {
+    border: 1px solid lightgrey;
+    border-radius: .5rem;
+    background-color: white;
+    width: 50%;
+    cursor: pointer;
+}
+
+.edit-listing:hover {
+    background-color: rgb(104, 115, 202);
+    color: white;
+    cursor: pointer;
+}
+
+.add-listing {
+    border: 1px solid lightgrey;
+    border-radius: .5rem;
+    background-color: white;
+    width: 80%;
+    height: 100%;
+    cursor: pointer;
+}

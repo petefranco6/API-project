@@ -1,0 +1,198 @@
+.spot-images-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-height: 520px;
+  gap: 0.5rem;
+}
+
+.reserve {
+  background-color: #d70f5f;
+  color: white;
+  width: 100%;
+  border: none;
+  height: 45px;
+  border-radius: 10px;
+}
+
+.preview-true {
+  width: 50%;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  object-fit: cover;
+}
+
+.spot-images-container.\31  .preview-true{
+  width: 100%;
+  border-radius: 15px;
+}
+
+.spot-images-container.\32  .preview-false{
+  width: 49%;
+}
+
+.preview-false {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.preview-false img {
+  object-fit: cover;
+}
+
+.preview-false.\31  img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0 15px 15px 0;
+}
+
+.preview-false.\32 {
+  flex-direction: column;
+}
+
+.preview-false.\32  img:nth-child(1){
+  width: 100%;
+  height: 49%;
+  border-top-right-radius: 15px;
+}
+
+.preview-false.\32  img:nth-child(2) {
+  width: 100%;
+  height: 49%;
+  border-bottom-right-radius: 15px;
+}
+
+.preview-false.\33  img:nth-child(1){
+  width: 49%;
+}
+
+.preview-false.\33  img:nth-child(2) {
+  width: 49%;
+  border-top-right-radius: 15px;
+}
+
+.preview-false.\33  img:nth-child(3) {
+  width: 100%;
+  height: 60%;
+  border-bottom-right-radius: 15px;
+}
+
+.preview-false.\34  img {
+  width: 49%;
+  height: 49%;
+}
+
+.preview-false.\34  img:nth-child(2) {
+  border-top-right-radius: 15px;
+}
+
+.preview-false.\34  img:nth-child(4) {
+  border-bottom-right-radius: 15px;
+}
+
+.spot-details-container {
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.info {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  margin-left: 8%;
+}
+
+.spot-details-description {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.spot-details-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5rem;
+  width: 80vw;
+  justify-content: center;
+  margin-left: 8%;
+}
+
+.form-price-per-night {
+  font-size: 1.75rem;
+}
+
+.reserve-date-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  max-width: 35%;
+  gap: 1rem;
+  padding: 20px 30px 20px 30px;
+  box-shadow: 3px 2px 14px rgba(0, 0, 0, 0.4);
+  position: relative;
+  left: 38.5%;
+  border-radius: 15px;
+}
+
+.reserve-form-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.reserve-info-calc {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1rem;
+  align-content: center;
+  align-items: center;
+}
+
+.reserve-form {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 1rem;
+}
+
+.reserve-form input {
+  height: 50px;
+  width: 50%;
+  border: 2px solid lightgray;
+}
+
+.checkin-input {
+  border-top-left-radius: .5rem;
+  border-bottom-left-radius: .5rem;
+}
+
+.reserve-form .checkout-input {
+  border-top-right-radius: .5rem;
+  border-bottom-right-radius: .5rem;
+  border-left: none;
+}
+
+.reserve-info-calc div {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.total-price {
+  padding-top: 1.5rem;
+  border-top: 1px solid lightgray;
+  font-weight:900;
+}
+
+
+@media (width < 1024px) {
+  .preview-false {
+    display: none;
+  }
+  .preview-true {
+    width: 100%;
+    border-radius: 15px;
+  }
+}
