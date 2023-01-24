@@ -5,6 +5,7 @@ import { useState } from "react";
 import * as spotsActions from "../../store/spots";
 import classes from "./OwnedSpotItem.module.css";
 import deleteIcon from "../../icons/delete.png";
+import { Link } from "react-router-dom";
 
 const OwnedSpotItem = ({ details, handleCheckboxChange }) => {
   const dispatch = useDispatch();
@@ -20,10 +21,17 @@ const OwnedSpotItem = ({ details, handleCheckboxChange }) => {
     setIsChecked(!isChecked);
   };
 
+  let liStyle;
+  if(isChecked) {
+    liStyle = {
+      backgroundColor: "rgb(244, 209, 209)"
+    }
+  }
+
   return (
     <>
       <li
-        style={{ backgroundColor: isChecked ? "rgb(244, 209, 209)" : "white" }}
+        style={liStyle}
         className={classes["owned-item"]}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -39,9 +47,9 @@ const OwnedSpotItem = ({ details, handleCheckboxChange }) => {
             <div className={classes.name}>
               <strong>{details.name}</strong>
             </div>
-            <div className={classes["owned-spot-img"]}>
+            <Link to={`/spots/${details.id}`} className={classes["owned-spot-img"]}>
               <img alt="" src={details.previewImage} />
-            </div>
+            </Link>
             <div className={classes.location}>
               <div>{details.address}</div>
               <div>{`${details.city}, ${details.state}`}</div>

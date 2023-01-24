@@ -7,6 +7,21 @@ const ADD_SPOT = "/spots/addSpot";
 const EDIT_SPOT = "/spots/editSpot";
 const REMOVE_SPOT = "/spots/removeSpot";
 const ADD_IMG = "/spots/addImage";
+const SET_MESSAGE = "/bookings/setMessage";
+const CLEAR_MESSAGE = "/bookings/clearMessage";
+
+const clearMessage = () => {
+  return {
+    type: CLEAR_MESSAGE,
+  };
+};
+
+const setMessage = (message) => {
+  return {
+    type: SET_MESSAGE,
+    payload: message,
+  };
+};
 
 const addImageToSpot = (spotWithImg) => {
   return {
@@ -90,81 +105,124 @@ export const createSpot = (newSpot) => async (dispatch, getState) => {
     url,
     preview,
   } = newSpot;
-  const response = await csrfFetch("/api/spots", {
-    method: "POST",
-    body: JSON.stringify({
-      address,
-      city,
-      state,
-      country,
-      lat: -22.22,
-      lng: -19.33,
-      name,
-      description,
-      price,
-    }),
-    headers: { "Content-Type": "application/json" },
-  });
 
-  const data = await response.json();
+  try {
+    const response = await csrfFetch("/api/spots", {
+      method: "POST",
+      body: JSON.stringify({
+        address,
+        city,
+        state,
+        country,
+        lat: -22.22,
+        lng: -19.33,
+        name,
+        description,
+        price,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
 
-  dispatch(addToSpots(data));
+    const data = await response.json();
 
-  const ownedSpots = getState().spots.ownedSpots;
-  const ownedSpot = ownedSpots[ownedSpots.length - 1];
+    if (!response.ok) {
+      throw new Error(data.message)
+    }
 
-  const responseImg = await csrfFetch(`/api/spots/${ownedSpot.id}/images`, {
-    method: "POST",
-    body: JSON.stringify({
-      url,
-      preview,
-    }),
-  });
+    dispatch(addToSpots(data));
 
-  const dataImg = await responseImg.json();
+    const ownedSpots = getState().spots.ownedSpots;
+    const ownedSpot = ownedSpots[ownedSpots.length - 1];
 
-  dispatch(addImageToSpot({ ...data, previewImage: dataImg.url }));
+    const responseImg = await csrfFetch(`/api/spots/${ownedSpot.id}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url,
+        preview,
+      }),
+    });
 
-  return [response, responseImg];
+    const dataImg = await responseImg.json();
+
+    if (!responseImg.ok) {
+      throw new Error(data.message)
+    }
+
+    dispatch(addImageToSpot({ ...data, previewImage: dataImg.url }));
+    dispatch(setMessage({'success': "Listing added successfully!"}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+    return [response, responseImg];
+  } catch (error) {
+    dispatch(setMessage({'error': error.message}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+  }
 };
 
 export const updateSpot = (spot) => async (dispatch) => {
   const { address, city, state, country, name, description, price, id } = spot;
 
-  const response = await csrfFetch(`/api/spots/${id}`, {
-    method: "PUT",
-    body: JSON.stringify({
-      address,
-      city,
-      state,
-      country,
-      lat: -22.22,
-      lng: -19.33,
-      name,
-      description,
-      price,
-    }),
-    headers: { "Content-Type": "application/json" },
-  });
+  try {
+    const response = await csrfFetch(`/api/spots/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        address,
+        city,
+        state,
+        country,
+        lat: -22.22,
+        lng: -19.33,
+        name,
+        description,
+        price,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  dispatch(editSpot(data));
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
 
-  return response;
+    dispatch(editSpot(data));
+    dispatch(setMessage({ success: "Listing updated successfully!" }));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+    return response;
+  } catch (error) {
+    dispatch(setMessage({ error: error.message }));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+  }
 };
 
 export const deleteSpot = (spotId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${spotId}`, {
-    method: "DELETE",
-  });
 
-  dispatch(removeSpot(spotId));
+  try {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+      method: "DELETE",
+    });
 
-  return response;
+    const data = await response.json();
+
+    if(!response.ok) {
+      throw new Error(data.message)
+    }
+
+    dispatch(removeSpot(spotId));
+    dispatch(setMessage({'success': data.message}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+
+    return response;
+  } catch (error) {
+    dispatch(setMessage({'error': error.message}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+  }
+
 };
 
-const spotsReducer = (state = { spots: [], spot: {}, ownedSpots:[] }, action) => {
+const spotsReducer = (
+  state = { spots: [], spot: {}, ownedSpots: [], message: {} },
+  action
+) => {
   switch (action.type) {
     case POPULATE_SPOTS:
       return {
@@ -192,13 +250,17 @@ const spotsReducer = (state = { spots: [], spot: {}, ownedSpots:[] }, action) =>
       return {
         ...state,
         ownedSpots: state.ownedSpots.map((spot) =>
-          spot.id === action.payload.id ? (spot = {...spot,...action.payload}) : spot
+          spot.id === action.payload.id
+            ? (spot = { ...spot, ...action.payload })
+            : spot
         ),
       };
     case REMOVE_SPOT:
       return {
         ...state,
-        ownedSpots: state.ownedSpots.filter((spot) => spot.id !== parseInt(action.payload)),
+        ownedSpots: state.ownedSpots.filter(
+          (spot) => spot.id !== parseInt(action.payload)
+        ),
       };
     case ADD_IMG:
       return {
@@ -206,6 +268,16 @@ const spotsReducer = (state = { spots: [], spot: {}, ownedSpots:[] }, action) =>
         ownedSpots: state.ownedSpots.map((spot) =>
           spot.id === action.payload.id ? (spot = action.payload) : spot
         ),
+      };
+    case SET_MESSAGE:
+      return {
+        ...state,
+        message: action.payload,
+      };
+    case CLEAR_MESSAGE:
+      return {
+        ...state,
+        message: {},
       };
     default:
       return state;

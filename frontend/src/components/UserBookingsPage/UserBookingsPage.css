@@ -1,0 +1,73 @@
+.user-bookings-container {
+  margin-right: 100px;
+  margin-left: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bookings-divider {
+  border: 1px solid lightgray;
+  padding: 0;
+  margin: 0;
+}
+
+.no-trips p,
+.no-trips a {
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.no-trips a {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 5px;
+  text-decoration: none;
+  color: inherit;
+  max-width: 165px;
+  height: 45px;
+  align-items: center;
+  justify-content: center;
+}
+
+.booking-title {
+  position: relative;
+}
+
+.delete-icon-booking {
+  position: absolute;
+  right: 50px;
+  top: -10px;
+  cursor: pointer;
+}
+
+.delete-icon-booking img {
+  width: 70%;
+}
+
+.search-booking {
+  margin-bottom: 10px;
+}
+
+.banner {
+  position: fixed;
+  bottom: 5%;
+  right: 1%;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  z-index: 10; /* to be sure it will be on top of other elements */
+  /* add some transition to make it smoother*/
+  transition: all 0.3s ease-in-out;
+}
+
+.banner.success {
+  background-color: rgb(34, 129, 34);
+  color: white;
+}
+
+.banner.error {
+  background-color: #d70f5f;
+  color: white;
+}

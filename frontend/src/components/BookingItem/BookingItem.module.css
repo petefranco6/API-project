@@ -1,44 +1,63 @@
 .divider {
-    border: 1px solid lightgray;
-    padding: 0;
-    margin: 0;
-  }
+  border: 1px solid lightgray;
+  padding: 0;
+  margin: 0;
+}
 
 .booking-item {
-    padding: 1rem;
-    list-style: none;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    position: relative;
-    border-radius: .25rem;
+  padding: 1rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  position: relative;
+  border-radius: 0.25rem;
+}
+
+.booking-item .checkbox-booking,
+.booking-img,
+.booking-location,
+.booking-dates {
+  width: 20%;
 }
 
 .booking-item:hover {
-    background-color: rgb(244, 209, 209);
+  background-color: rgb(244, 209, 209);
 }
 
 .booking-img {
-    height: 80px;
+  height: 80px;
+  display: flex;
+  padding: 0;
 }
 
 .booking-img img {
-    height: 100%;
-    border-radius: 20px
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.booking-img img:hover {
+  cursor: pointer;
 }
 
 .checkbox-booking {
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
 }
 
 .delete-icon {
-    width: 2%;
-    position: absolute;
-    right: 5px;
+  width: 2%;
+  position: absolute;
+  right: 5px;
 }
 
 .delete-icon img {
-    width: 100%;
-    cursor: pointer;
+  width: 100%;
+  cursor: pointer;
+}
+
+.checkbox-booking input:hover {
+  cursor: pointer;
 }

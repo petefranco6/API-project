@@ -3,6 +3,21 @@ import { csrfFetch } from "./csrf";
 const POPULATE_BOOKINGS = "/bookings/populateBookings";
 const REMOVE_BOOKING = "/bookings/removeBooking";
 const ADD_BOOKING = "/bookings/addBooking";
+const SET_MESSAGE = "/bookings/setMessage";
+const CLEAR_MESSAGE = "/bookings/clearMessage";
+
+const clearMessage = () => {
+  return {
+    type: CLEAR_MESSAGE,
+  };
+};
+
+const setMessage = (message) => {
+  return {
+    type: SET_MESSAGE,
+    payload: message,
+  };
+};
 
 const addToBookings = (booking) => {
   return {
@@ -33,34 +48,60 @@ export const getCurrentBookings = () => async (dispatch) => {
 };
 
 export const deleteBooking = (bookingId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/bookings/${bookingId}`, {
-    method: "DELETE",
-  });
+  try {
+    const response = await csrfFetch(`/api/bookings/${bookingId}`, {
+      method: "DELETE",
+    });
 
-  dispatch(removeBooking(bookingId));
+    const data = await response.json();
 
-  return response;
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    dispatch(removeBooking(bookingId));
+    dispatch(setMessage({'success':data.message}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+    return response;
+  } catch (error) {
+    dispatch(setMessage({'error':error.message}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+  }
 };
 
 export const createBooking = (booking) => async (dispatch) => {
   const { checkin, checkout, spotId } = booking;
-  const response = await csrfFetch(`/api/spots/${spotId}/bookings`, {
-    method: "POST",
-    body: JSON.stringify({
-      startDate: checkin,
-      endDate: checkout,
-    }),
-    headers: { "Content-Type": "application/json" },
-  });
 
-  const data = await response.json();
+  try {
 
-  dispatch(addToBookings(data));
+    const response = await csrfFetch(`/api/spots/${spotId}/bookings`, {
+      method: "POST",
+      body: JSON.stringify({
+        startDate: checkin,
+        endDate: checkout,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
 
-  return response;
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    dispatch(addToBookings(data));
+    dispatch(setMessage({'success': "Booking added successfully!"}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+
+    return response;
+
+  } catch (error) {
+    dispatch(setMessage({'error': error.message}));
+    setTimeout(() => dispatch(clearMessage()), 3000);
+  }
 };
 
-const bookingsReducer = (state = { bookings: [] }, action) => {
+const bookingsReducer = (state = { bookings: [], message: {} }, action) => {
   switch (action.type) {
     case POPULATE_BOOKINGS:
       return {
@@ -79,6 +120,16 @@ const bookingsReducer = (state = { bookings: [] }, action) => {
         ...state,
         //copying the original state
         bookings: [...state.bookings, action.payload],
+      };
+    case SET_MESSAGE:
+      return {
+        ...state,
+        message: action.payload,
+      };
+    case CLEAR_MESSAGE:
+      return {
+        ...state,
+        message: {},
       };
     default:
       return state;

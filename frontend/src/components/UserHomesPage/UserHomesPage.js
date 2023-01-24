@@ -11,6 +11,7 @@ const UserHomesPage = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.session.user);
   const ownedSpots = useSelector((state) => state.spots.ownedSpots);
+  const message = useSelector((state) => state.spots.message);
   const [checkedItems, setCheckedItems] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,21 +30,31 @@ const UserHomesPage = () => {
   };
 
   const deleteSpotsSelectedHandler = () => {
-    for(const key in checkedItems) {
-      if(checkedItems[key] === true) {
-        dispatch(spotsActions.deleteSpot(key))
+    for (const key in checkedItems) {
+      if (checkedItems[key] === true) {
+        dispatch(spotsActions.deleteSpot(key));
       }
     }
-  }
+  };
 
   return (
     <div className={classes.container}>
+      {Object.keys(message).includes("error") && (
+        <div className="banner error">{message["error"]}</div>
+      )}
+      {Object.keys(message).includes("success") && (
+        <div className="banner success">{message["success"]}</div>
+      )}
       <div className={classes.welcome}>
         <h1>Welcome {currentUser.firstName}!</h1>
         <div className={classes["delete-multiple"]}>
           <div className={classes["delete-icon"]}>
             {Object.values(checkedItems).some((value) => value) && (
-              <img alt="" src={deleteIcon} onClick={deleteSpotsSelectedHandler} />
+              <img
+                alt=""
+                src={deleteIcon}
+                onClick={deleteSpotsSelectedHandler}
+              />
             )}
           </div>
           <OpenModalButton
@@ -55,7 +66,8 @@ const UserHomesPage = () => {
       </div>
       <div className={classes.divider}></div>
       <ul>
-        {!isLoading && ownedSpots.length > 0 &&
+        {!isLoading &&
+          ownedSpots.length > 0 &&
           ownedSpots.map((spot) => (
             <OwnedSpotItem
               details={spot}
@@ -64,7 +76,7 @@ const UserHomesPage = () => {
             />
           ))}
       </ul>
-      {!isLoading && ownedSpots.length === 0 && <h1>No listings yet!</h1> }
+      {!isLoading && ownedSpots.length === 0 && <h1>No listings yet!</h1>}
       {isLoading && <h1>Loading....</h1>}
     </div>
   );
