@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import * as bookingsActions from "../../store/bookings";
 import classes from "./BookingItem.module.css";
 import deleteIcon from "../../icons/delete.png";
+import { Link } from "react-router-dom";
 
 const BookingItem = ({ booking, handleCheckboxChange }) => {
   const dispatch = useDispatch();
@@ -18,11 +19,18 @@ const BookingItem = ({ booking, handleCheckboxChange }) => {
     setIsChecked(!isChecked);
   }
 
+  let liStyle;
+  if(isChecked) {
+    liStyle = {
+      backgroundColor: "rgb(244, 209, 209)"
+    }
+  }
+
   if (booking.Spot) {
     return (
       <>
         <li
-          style={{ backgroundColor: isChecked ? "rgb(244, 209, 209)" : "white" }}
+          style={liStyle}
           className={classes["booking-item"]}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -36,15 +44,15 @@ const BookingItem = ({ booking, handleCheckboxChange }) => {
             />
             <div>{booking.Spot.name}</div>
           </div>
-          <div className={classes["booking-img"]}>
+          <Link to={`/spots/${booking.Spot.id}`} className={classes["booking-img"]}>
             <img alt="" src={booking.Spot.previewImage} />
-          </div>
-          <div>
+          </Link>
+          <div className={classes["booking-location"]}>
             <div>{booking.Spot.address}</div>
             <div>{`${booking.Spot.city}, ${booking.Spot.state}`}</div>
             <div>{booking.Spot.country}</div>
           </div>
-          <div>
+          <div className={classes["booking-dates"]}>
             <div>{`Start Date: ${booking.startDate}`}</div>
             <div>{`End Date:  ${booking.endDate}`}</div>
           </div>

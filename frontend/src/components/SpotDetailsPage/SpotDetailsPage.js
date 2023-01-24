@@ -12,6 +12,7 @@ const SpotDetailsPage = () => {
   const [checkout, setCheckout] = useState("");
   const [errors, setErrors] = useState([]);
   const spot = useSelector((state) => state.spots.spot);
+  const message = useSelector((state) => state.bookings.message);
 
   useEffect(() => {
     dispatch(spotsActions.getSpotDetails(params.spotId));
@@ -22,13 +23,11 @@ const SpotDetailsPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    dispatch(
-      bookingsActions.createBooking({ checkin, checkout, spotId })
-      )
-      .catch(async (res) => {
-      const data = await res.json();
-      if (data.errors) setErrors(data.errors);
-    });
+    dispatch(bookingsActions.createBooking({ checkin, checkout, spotId }));
+    //   .catch(async (res) => {
+    //   const data = await res.json();
+    //   if (data.errors) setErrors(data.errors);
+    // });
   };
 
   let imagePreview;
@@ -63,6 +62,12 @@ const SpotDetailsPage = () => {
 
   return (
     <div className={"spot-details-container"}>
+      {Object.keys(message).includes("error") && (
+        <div className="banner error">{message["error"]}</div>
+      )}
+      {Object.keys(message).includes("success") && (
+        <div className="banner success">{message["success"]}</div>
+      )}
       <div className={"info"}>
         <h1>{spot.description}</h1>
         <div className={"spot-details-description"}>

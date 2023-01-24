@@ -94,7 +94,7 @@ function CreateSpotFormModal() {
         <input
           type="text"
           placeholder="Description"
-          maxLength="35"
+          maxLength="36"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required

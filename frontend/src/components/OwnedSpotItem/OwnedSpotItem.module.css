@@ -21,10 +21,12 @@
 
 .owned-spot-img {
     height: 80px;
+    padding: 0;
 }
 
 .owned-spot-img img {
     height: 100%;
+    width: 100%;
     border-radius: 20px;
     object-fit: cover;
 

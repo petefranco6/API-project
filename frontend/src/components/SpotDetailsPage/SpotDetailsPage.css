@@ -48,18 +48,14 @@
   border-radius: 0 15px 15px 0;
 }
 
-.preview-false.\32 {
-  flex-direction: column;
-}
-
 .preview-false.\32  img:nth-child(1){
-  width: 100%;
+  width: 99%;
   height: 49%;
   border-top-right-radius: 15px;
 }
 
 .preview-false.\32  img:nth-child(2) {
-  width: 100%;
+  width: 99%;
   height: 49%;
   border-bottom-right-radius: 15px;
 }
@@ -74,8 +70,8 @@
 }
 
 .preview-false.\33  img:nth-child(3) {
-  width: 100%;
-  height: 60%;
+  width: 99%;
+  height: 49%;
   border-bottom-right-radius: 15px;
 }
 
@@ -190,6 +186,28 @@
 
 .errors-list li{
   list-style: none;
+}
+
+.banner {
+  position: fixed;
+  bottom: 5%;
+  right: 1%;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  z-index: 10; /* to be sure it will be on top of other elements */
+  /* add some transition to make it smoother*/
+  transition: all 0.3s ease-in-out;
+}
+
+.banner.success {
+  background-color: rgb(34, 129, 34);
+  color: white;
+}
+
+.banner.error {
+  background-color: #d70f5f;
+  color: white;
 }
 
 
