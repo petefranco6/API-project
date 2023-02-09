@@ -7,19 +7,35 @@ const ADD_SPOT = "/spots/addSpot";
 const EDIT_SPOT = "/spots/editSpot";
 const REMOVE_SPOT = "/spots/removeSpot";
 const ADD_IMG = "/spots/addImage";
-const SET_MESSAGE = "/bookings/setMessage";
-const CLEAR_MESSAGE = "/bookings/clearMessage";
+const SET_BANNER_MESSAGE = "/spots/setBannerMessage";
+const CLEAR_BANNER_MESSAGE = "/spots/clearBannerMessage";
+const SET_IS_LOADING = "/spots/setIsLoading";
+const CLEAR_OWNED_SPOTS = "/spots/clearOwnedSpots";
+let bannerTimer;
 
-const clearMessage = () => {
+export const clearOwnedSpots = () => {
   return {
-    type: CLEAR_MESSAGE,
+    type: CLEAR_OWNED_SPOTS,
   };
 };
 
-const setMessage = (message) => {
+const setIsLoading = (boolean) => {
   return {
-    type: SET_MESSAGE,
-    payload: message,
+    type: SET_IS_LOADING,
+    payload: boolean,
+  };
+};
+
+const clearBannerMessage = () => {
+  return {
+    type: CLEAR_BANNER_MESSAGE,
+  };
+};
+
+const setBannerMessage = (bannerMessage) => {
+  return {
+    type: SET_BANNER_MESSAGE,
+    payload: bannerMessage,
   };
 };
 
@@ -80,9 +96,11 @@ export const getAllSpots = () => async (dispatch) => {
 };
 
 export const getSpotDetails = (spotId) => async (dispatch) => {
+  dispatch(setIsLoading(true));
   const response = await fetch(`/api/spots/${spotId}`);
   const data = await response.json();
   dispatch(populateSpotDetails(data));
+  dispatch(setIsLoading(false));
   return response;
 };
 
@@ -106,121 +124,106 @@ export const createSpot = (newSpot) => async (dispatch, getState) => {
     preview,
   } = newSpot;
 
-  try {
-    const response = await csrfFetch("/api/spots", {
-      method: "POST",
-      body: JSON.stringify({
-        address,
-        city,
-        state,
-        country,
-        lat: -22.22,
-        lng: -19.33,
-        name,
-        description,
-        price,
-      }),
-      headers: { "Content-Type": "application/json" },
-    });
+  clearTimeout(bannerTimer);
 
-    const data = await response.json();
+  const response = await csrfFetch("/api/spots", {
+    method: "POST",
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat: -22.22,
+      lng: -19.33,
+      name,
+      description,
+      price,
+    }),
+    headers: { "Content-Type": "application/json" },
+  });
 
-    if (!response.ok) {
-      throw new Error(data.message)
-    }
+  const data = await response.json();
 
-    dispatch(addToSpots(data));
+  dispatch(addToSpots(data));
 
-    const ownedSpots = getState().spots.ownedSpots;
-    const ownedSpot = ownedSpots[ownedSpots.length - 1];
+  const ownedSpots = getState().spots.ownedSpots;
+  const ownedSpot = ownedSpots[ownedSpots.length - 1];
 
-    const responseImg = await csrfFetch(`/api/spots/${ownedSpot.id}/images`, {
-      method: "POST",
-      body: JSON.stringify({
-        url,
-        preview,
-      }),
-    });
+  const responseImg = await csrfFetch(`/api/spots/${ownedSpot.id}/images`, {
+    method: "POST",
+    body: JSON.stringify({
+      url,
+      preview,
+    }),
+  });
 
-    const dataImg = await responseImg.json();
+  const dataImg = await responseImg.json();
 
-    if (!responseImg.ok) {
-      throw new Error(data.message)
-    }
-
-    dispatch(addImageToSpot({ ...data, previewImage: dataImg.url }));
-    dispatch(setMessage({'success': "Listing added successfully!"}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-    return [response, responseImg];
-  } catch (error) {
-    dispatch(setMessage({'error': error.message}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-  }
+  dispatch(addImageToSpot({ ...data, previewImage: dataImg.url }));
+  dispatch(setBannerMessage({ success: "successfully created listing!" }));
+  bannerTimer = setTimeout(() => dispatch(clearBannerMessage()), 3000);
+  return response;
 };
 
 export const updateSpot = (spot) => async (dispatch) => {
   const { address, city, state, country, name, description, price, id } = spot;
 
-  try {
-    const response = await csrfFetch(`/api/spots/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        address,
-        city,
-        state,
-        country,
-        lat: -22.22,
-        lng: -19.33,
-        name,
-        description,
-        price,
-      }),
-      headers: { "Content-Type": "application/json" },
-    });
+  clearTimeout(bannerTimer);
 
-    const data = await response.json();
+  const response = await csrfFetch(`/api/spots/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat: -22.22,
+      lng: -19.33,
+      name,
+      description,
+      price,
+    }),
+    headers: { "Content-Type": "application/json" },
+  });
 
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
+  const data = await response.json();
 
-    dispatch(editSpot(data));
-    dispatch(setMessage({ success: "Listing updated successfully!" }));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-    return response;
-  } catch (error) {
-    dispatch(setMessage({ error: error.message }));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-  }
+  dispatch(editSpot(data));
+  dispatch(setBannerMessage({ success: "successfully updated listing!" }));
+  bannerTimer = setTimeout(() => dispatch(clearBannerMessage()), 3000);
+
+  return response;
+};
+
+export const setMessage = (message) => async (dispatch) => {
+  dispatch(setBannerMessage({ error: message }));
+  setTimeout(() => dispatch(clearBannerMessage()), 3000);
 };
 
 export const deleteSpot = (spotId) => async (dispatch) => {
+  clearTimeout(bannerTimer);
 
-  try {
-    const response = await csrfFetch(`/api/spots/${spotId}`, {
-      method: "DELETE",
-    });
+  const response = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
 
-    const data = await response.json();
+  const data = await response.json();
 
-    if(!response.ok) {
-      throw new Error(data.message)
-    }
+  dispatch(removeSpot(spotId));
+  dispatch(setBannerMessage({ success: data.message }));
+  bannerTimer = setTimeout(() => dispatch(clearBannerMessage()), 3000);
 
-    dispatch(removeSpot(spotId));
-    dispatch(setMessage({'success': data.message}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-
-    return response;
-  } catch (error) {
-    dispatch(setMessage({'error': error.message}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-  }
-
+  return response;
 };
 
 const spotsReducer = (
-  state = { spots: [], spot: {}, ownedSpots: [], message: {} },
+  state = {
+    spots: [],
+    spot: {},
+    ownedSpots: [],
+    bannerMessage: {},
+    isLoading: false,
+  },
   action
 ) => {
   switch (action.type) {
@@ -269,15 +272,25 @@ const spotsReducer = (
           spot.id === action.payload.id ? (spot = action.payload) : spot
         ),
       };
-    case SET_MESSAGE:
+    case SET_BANNER_MESSAGE:
       return {
         ...state,
-        message: action.payload,
+        bannerMessage: action.payload,
       };
-    case CLEAR_MESSAGE:
+    case CLEAR_BANNER_MESSAGE:
       return {
         ...state,
-        message: {},
+        bannerMessage: {},
+      };
+    case SET_IS_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case CLEAR_OWNED_SPOTS:
+      return {
+        ...state,
+        ownedSpots: [],
       };
     default:
       return state;

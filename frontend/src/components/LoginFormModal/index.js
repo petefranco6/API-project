@@ -22,7 +22,6 @@ function LoginFormModal() {
         if (data.errors) {
           setErrors(data.errors);
         }
-
       });
   };
 
@@ -36,13 +35,13 @@ function LoginFormModal() {
     <>
       <form onSubmit={handleSubmit} className={classes["form-container"]}>
         <div className={classes.header}>
+          <h3>Log In</h3>
           <img
             alt=""
             src={close}
             className={classes["close-icon"]}
             onClick={closeModal}
           />
-          <h3>Log In</h3>
         </div>
         <div className={classes.divider}></div>
 
@@ -51,21 +50,26 @@ function LoginFormModal() {
             <li key={idx}>{error}</li>
           ))}
         </ul>
-
-        <input
-          placeholder="Email or Username"
-          type="text"
-          value={credential}
-          onChange={(e) => setCredential(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className={classes["input-container"]}>
+          <input
+            id="email-username"
+            type="text"
+            value={credential}
+            onChange={(e) => setCredential(e.target.value)}
+            required
+          />
+          <label htmlFor="email-username">Email or Username</label>
+        </div>
+        <div className={classes["input-container"]}>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password</label>
+        </div>
         <button className={classes.login} type="submit">
           Log In
         </button>

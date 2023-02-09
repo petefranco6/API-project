@@ -7,7 +7,7 @@
 }
 
 .img-container {
-  height: 70%;
+  height: 69%;
   display: flex;
 }
 
@@ -23,7 +23,6 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding: 5px 5px 0px 5px;
 }
 
 .rating {
@@ -31,25 +30,22 @@
   align-items: center;
 }
 
-.rating i {
-  font-size: small;
+.rating img {
+  height: 24px;
   padding: 3px;
 }
 
 .thick {
-  font-weight: 100;
+  font-weight: 600;
 }
 
-.description,
-.price {
-  padding: 0px 5px 5px 5px;
-}
-
-.description {
+.name, .miles {
   color: gray;
-  margin-bottom: .5rem;
 }
 
+.miles {
+  margin-bottom: .25rem;
+}
 
 .card-spot-content {
   display: flex;
@@ -57,4 +53,6 @@
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: space-between;
+  padding-left: .25rem;
+  padding-top: .75rem;
 }

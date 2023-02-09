@@ -1,0 +1,8 @@
+.owned-item {
+    border-bottom: 1px solid lightgray;
+    height: 70px;
+}
+
+.owned-item:hover {
+    background-color: rgb(239, 236, 236)
+}

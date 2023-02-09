@@ -3,19 +3,27 @@ import { csrfFetch } from "./csrf";
 const POPULATE_BOOKINGS = "/bookings/populateBookings";
 const REMOVE_BOOKING = "/bookings/removeBooking";
 const ADD_BOOKING = "/bookings/addBooking";
-const SET_MESSAGE = "/bookings/setMessage";
-const CLEAR_MESSAGE = "/bookings/clearMessage";
+const SET_BANNER_MESSAGE = "/bookings/setBannerMessage";
+const CLEAR_BANNER_MESSAGE = "/bookings/clearBannerMessage";
+const CLEAR_BOOKINGS = "/bookings/clearBookings"
+let bannerTimer;
 
-const clearMessage = () => {
+export const clearBookings = () => {
   return {
-    type: CLEAR_MESSAGE,
+    type: CLEAR_BOOKINGS
+  }
+}
+
+const clearBannerMessage = () => {
+  return {
+    type: CLEAR_BANNER_MESSAGE,
   };
 };
 
-const setMessage = (message) => {
+const setBannerMessage = (bannerMessage) => {
   return {
-    type: SET_MESSAGE,
-    payload: message,
+    type: SET_BANNER_MESSAGE,
+    payload: bannerMessage,
   };
 };
 
@@ -47,61 +55,54 @@ export const getCurrentBookings = () => async (dispatch) => {
   return response;
 };
 
+export const setMessage = (message) => async (dispatch) => {
+  dispatch(setBannerMessage({ error: message }));
+  setTimeout(() => dispatch(clearBannerMessage()), 3000);
+};
+
 export const deleteBooking = (bookingId) => async (dispatch) => {
-  try {
-    const response = await csrfFetch(`/api/bookings/${bookingId}`, {
-      method: "DELETE",
-    });
+  clearTimeout(bannerTimer);
 
-    const data = await response.json();
+  const response = await csrfFetch(`/api/bookings/${bookingId}`, {
+    method: "DELETE",
+  });
 
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
+  const data = await response.json();
 
-    dispatch(removeBooking(bookingId));
-    dispatch(setMessage({'success':data.message}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-    return response;
-  } catch (error) {
-    dispatch(setMessage({'error':error.message}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-  }
+  dispatch(removeBooking(bookingId));
+  dispatch(setBannerMessage({ success: data.message }));
+  bannerTimer = setTimeout(() => dispatch(clearBannerMessage()), 3000);
+
+  return response;
 };
 
 export const createBooking = (booking) => async (dispatch) => {
   const { checkin, checkout, spotId } = booking;
 
-  try {
+  clearTimeout(bannerTimer);
 
-    const response = await csrfFetch(`/api/spots/${spotId}/bookings`, {
-      method: "POST",
-      body: JSON.stringify({
-        startDate: checkin,
-        endDate: checkout,
-      }),
-      headers: { "Content-Type": "application/json" },
-    });
+  const response = await csrfFetch(`/api/spots/${spotId}/bookings`, {
+    method: "POST",
+    body: JSON.stringify({
+      startDate: checkin,
+      endDate: checkout,
+    }),
+    headers: { "Content-Type": "application/json" },
+  });
 
-    const data = await response.json();
+  const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
+  dispatch(addToBookings(data));
+  dispatch(setBannerMessage({ success: "Booking added successfully!" }));
+  bannerTimer = setTimeout(() => dispatch(clearBannerMessage()), 3000);
 
-    dispatch(addToBookings(data));
-    dispatch(setMessage({'success': "Booking added successfully!"}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-
-    return response;
-
-  } catch (error) {
-    dispatch(setMessage({'error': error.message}));
-    setTimeout(() => dispatch(clearMessage()), 3000);
-  }
+  return response;
 };
 
-const bookingsReducer = (state = { bookings: [], message: {} }, action) => {
+const bookingsReducer = (
+  state = { bookings: [], bannerMessage: {}, errors: [], isLoading: true },
+  action
+) => {
   switch (action.type) {
     case POPULATE_BOOKINGS:
       return {
@@ -121,15 +122,20 @@ const bookingsReducer = (state = { bookings: [], message: {} }, action) => {
         //copying the original state
         bookings: [...state.bookings, action.payload],
       };
-    case SET_MESSAGE:
+    case SET_BANNER_MESSAGE:
       return {
         ...state,
-        message: action.payload,
+        bannerMessage: action.payload,
       };
-    case CLEAR_MESSAGE:
+    case CLEAR_BANNER_MESSAGE:
       return {
         ...state,
-        message: {},
+        bannerMessage: {},
+      };
+      case CLEAR_BOOKINGS:
+      return {
+        ...state,
+        bookings: [],
       };
     default:
       return state;

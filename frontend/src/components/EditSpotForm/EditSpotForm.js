@@ -1,11 +1,11 @@
-// frontend/src/components/SignupFormPage/index.js
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as spotsActions from "../../store/spots";
-import classes from "./EditSpotFormModal.module.css";
+import classes from "./EditSpotForm.module.css";
 import close from "../../icons/close.png";
-function EditSpotFormModal({ details }) {
+
+function EditSpotForm({ details }) {
   const dispatch = useDispatch();
   const [address, setAddress] = useState(details.address);
   const [city, setCity] = useState(details.city);
@@ -20,7 +20,7 @@ function EditSpotFormModal({ details }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    return dispatch(
+    dispatch(
       spotsActions.updateSpot({
         address,
         city,
@@ -35,72 +35,109 @@ function EditSpotFormModal({ details }) {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
+        if (data.errors) {
+          setErrors(data.errors);
+        } else {
+          console.log("message");
+        }
       });
   };
 
   return (
-    <>
-      <form className={classes.container} onSubmit={handleSubmit}>
-        <div className={classes.header}>
-          <img alt="" src={close} className={classes["close-icon"]} onClick={closeModal} />
-          <h3>Edit Listing</h3>
-        </div>
-        <div className={classes.divider}></div>
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error, idx) => (
-              <li key={idx}>{error}</li>
-            ))}
-          </ul>
-        )}
-
+    <form className={classes.container} onSubmit={handleSubmit}>
+      <div className={classes.header}>
+        <h3>Edit Listing</h3>
+        <img
+          alt=""
+          src={close}
+          className={classes["close-icon"]}
+          onClick={closeModal}
+        />
+      </div>
+      <div className={classes.divider}></div>
+      {errors.length > 0 && (
+        <ul className={classes["error-list"]}>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
+      )}
+      <div className={classes["edit-input-container"]}>
         <input
-          type="text"
+          id="address"
           value={address}
+          type="text"
           onChange={(e) => setAddress(e.target.value)}
           required
         />
+        <label htmlFor="address">Address</label>
+      </div>
+      <div className={classes["edit-input-container"]}>
         <input
+          id="city"
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           required
         />
+        <label htmlFor="city">City</label>
+      </div>
+      <div className={classes["edit-input-container"]}>
         <input
+          id="state"
           type="text"
           value={state}
           onChange={(e) => setState(e.target.value)}
           required
         />
+        <label htmlFor="state">State</label>
+      </div>
+      <div className={classes["edit-input-container"]}>
         <input
+          id="country"
           type="text"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
           required
         />
+        <label htmlFor="country">Country</label>
+      </div>
+      <div className={classes["edit-input-container"]}>
         <input
+          id="description"
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+        <label htmlFor="description">Description</label>
+      </div>
+      <div className={classes["edit-input-container"]}>
         <input
+          id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
+        <label htmlFor="name">Name</label>
+      </div>
+      <div className={classes["edit-input-container"]}>
         <input
+          id="price"
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
         />
-        <button className={classes.edit} type="submit">Edit</button>
-      </form>
-    </>
+        <label htmlFor="price">Price</label>
+      </div>
+
+      <button className={classes.edit} type="submit">
+        Edit
+      </button>
+    </form>
   );
 }
 
-export default EditSpotFormModal;
+export default EditSpotForm;

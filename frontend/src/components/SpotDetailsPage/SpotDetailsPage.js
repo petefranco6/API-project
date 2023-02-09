@@ -4,30 +4,58 @@ import { useDispatch, useSelector } from "react-redux";
 import * as spotsActions from "../../store/spots";
 import * as bookingsActions from "../../store/bookings";
 import "./SpotDetailsPage.css";
+import star from "../../icons/star.png";
 
 const SpotDetailsPage = () => {
+  let defaultCheckout = new Date();
+  defaultCheckout.setDate(defaultCheckout.getDate() + 1);
+  defaultCheckout = defaultCheckout.toISOString().substring(0, 10);
+
   const params = useParams();
   const dispatch = useDispatch();
-  const [checkin, setCheckin] = useState("");
-  const [checkout, setCheckout] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [checkin, setCheckin] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
+  const [checkout, setCheckout] = useState(defaultCheckout);
   const spot = useSelector((state) => state.spots.spot);
-  const message = useSelector((state) => state.bookings.message);
+  const bannerMessage = useSelector((state) => state.bookings.bannerMessage);
+  const [errors, setErrors] = useState([]);
+  const currentUser = useSelector((state) => state.session.user);
+  const isLoading = useSelector((state) => state.spots.isLoading);
 
   useEffect(() => {
-    dispatch(spotsActions.getSpotDetails(params.spotId));
+    dispatch(spotsActions.getSpotDetails(params.spotId))
   }, [dispatch, params.spotId]);
 
   const { spotId } = params;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors([]);
-    dispatch(bookingsActions.createBooking({ checkin, checkout, spotId }));
-    //   .catch(async (res) => {
-    //   const data = await res.json();
-    //   if (data.errors) setErrors(data.errors);
-    // });
+    dispatch(
+      bookingsActions.createBooking({ checkin, checkout, spotId })
+    )
+    .catch(async (res) => {
+      const data = await res.json();
+      if (data.errors) setErrors(data.errors);
+    });
+  };
+
+  const diffInDays = (a, b) => {
+    const date1 = new Date(a);
+    const date2 = new Date(b);
+
+    const utc1 = Date.UTC(
+      date1.getFullYear(),
+      date1.getMonth(),
+      date1.getDate()
+    );
+    const utc2 = Date.UTC(
+      date2.getFullYear(),
+      date2.getMonth(),
+      date2.getDate()
+    );
+
+    return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
   };
 
   let imagePreview;
@@ -60,91 +88,116 @@ const SpotDetailsPage = () => {
     numOfReviews = `${spot.numReviews} reviews`;
   }
 
-  return (
-    <div className={"spot-details-container"}>
-      {Object.keys(message).includes("error") && (
-        <div className="banner error">{message["error"]}</div>
-      )}
-      {Object.keys(message).includes("success") && (
-        <div className="banner success">{message["success"]}</div>
-      )}
-      <div className={"info"}>
-        <h1>{spot.description}</h1>
-        <div className={"spot-details-description"}>
-          {spot.avgStarRating && (
-            <span>
-              <i className="fa-solid fa-star"></i>
-              {stars}
-            </span>
-          )}
-          <span>{numOfReviews}</span>
-          <span>{`${spot.city},${spot.state},${spot.country}`}</span>
-        </div>
-      </div>
-      <div className="spot-details-content">
-        {spot.spotImages && (
-          <div className={`spot-images-container ${spot.spotImages.length}`}>
-            {imagePreview}
-            <div className={`preview-false ${spot.spotImages.length - 1}`}>
-              {otherImages}
-            </div>
-          </div>
+  if (!isLoading) {
+    return (
+      <div className={"spot-details-container"}>
+        {Object.keys(bannerMessage).includes("success") && (
+          <div className="banner success">{bannerMessage["success"]}</div>
         )}
-        <div className={"reserve-date-card"}>
-          <div className="reserve-form-info">
-            <strong className="form-price-per-night">${spot.price}</strong>
-
+        <div className={"info"}>
+          <h1>{spot.name}</h1>
+          <div className={"spot-details-description"}>
             {spot.avgStarRating && (
-              <p>
-                <i className="fa-solid fa-star"></i> {stars} - ${numOfReviews}
-              </p>
+              <span>
+                <img src={star} alt="" />
+                {stars}
+              </span>
+            )}
+            <span>{`${numOfReviews} - ${spot.city}, ${spot.state}, ${spot.country}`}</span>
+          </div>
+        </div>
+        <div className="spot-details-content">
+          {spot.spotImages && (
+            <div className={`spot-images-container ${spot.spotImages.length}`}>
+              {imagePreview}
+              <div className={`preview-false ${spot.spotImages.length - 1}`}>
+                {otherImages}
+              </div>
+            </div>
+          )}
+          <div className="spot-details-info">
+            <div>
+              Description:
+              {spot.description}
+            </div>
+            {currentUser?.id !== spot.ownerId && (
+              <div className={"reserve-date-card"}>
+                <div className="reserve-form-info">
+                  <div className="form-price-per-night">
+                    <div className="form-price">${spot.price}</div>
+                    <div className="form-night">night</div>
+                  </div>
+
+                  {spot.avgStarRating && (
+                    <p className="review-rating">
+                      <img src={star} alt="" /> {`${stars} - ${numOfReviews}`}
+                    </p>
+                  )}
+                  {!spot.avgStarRating && <p>New</p>}
+                </div>
+
+                <form onSubmit={handleSubmit} className="reserve-form">
+                  <div className="date-inputs">
+                    <div className="checkin-input">
+                      <label>CHECK-IN</label>
+                      <input
+                        type="date"
+                        value={checkin}
+                        onChange={(e) => {
+                          setCheckin(e.target.value)
+                          setErrors([])
+                        }}
+                        required
+                      />
+                    </div>
+                    <div className="checkout-input">
+                      <label>CHECKOUT</label>
+                      <input
+                        type="date"
+                        value={checkout}
+                        onChange={(e) => {
+                          setCheckout(e.target.value)
+                          setErrors([])
+                        }}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button className={"reserve"} type="submit">
+                    Reserve
+                  </button>
+                  <ul className="errors-list">
+                    {errors.map((error, idx) => (
+                      <li key={idx}>{error}</li>
+                    ))}
+                  </ul>
+                </form>
+                {checkin && checkout && diffInDays(checkin, checkout) > 0 && (
+                  <div className="reserve-info-calc">
+                    <p>You won't be charged yet</p>
+                    <div className="calc-price">
+                      <p>
+                        ${spot.price} X {diffInDays(checkin, checkout)} nights
+                      </p>
+                      <p>${spot.price * diffInDays(checkin, checkout)}</p>
+                    </div>
+                    <div>
+                      <p>Service fee</p>
+                      <p>$243</p>
+                    </div>
+                    <div className="total-price">
+                      <p>Total before taxes</p>
+                      <p>${243 + spot.price * diffInDays(checkin, checkout)}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
-          <form onSubmit={handleSubmit} className="reserve-form">
-            <input
-              className="checkin-input"
-              type="date"
-              value={checkin}
-              onChange={(e) => setCheckin(e.target.value)}
-              required
-            />
-
-            <input
-              className="checkout-input"
-              type="date"
-              value={checkout}
-              onChange={(e) => setCheckout(e.target.value)}
-              required
-            />
-
-            <button className={"reserve"} type="submit">
-              Reserve
-            </button>
-            <ul className="errors-list">
-              {errors.map((error, idx) => (
-                <li key={idx}>{error}</li>
-              ))}
-            </ul>
-          </form>
-          <div className="reserve-info-calc">
-            <p>You won't be charged yet</p>
-            <div className="calc-price">
-              <p>${spot.price} X 5 nights</p>
-              <p>$1000</p>
-            </div>
-            <div>
-              <p>Service fee</p>
-              <p>$243</p>
-            </div>
-            <div className="total-price">
-              <p>Total before taxes</p>
-              <p>$1000</p>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default SpotDetailsPage;

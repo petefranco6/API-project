@@ -8,9 +8,12 @@
 }
 
 .form-container input {
-  height: 50px;
-  border-radius: 10px;
+  height: 60px;
+  border: 1px solid lightgrey;
+  border-radius: .5rem;
   padding: 4px;
+  width: 100%;
+  padding-left: 10px;
 }
 
 .login {
@@ -31,6 +34,7 @@
 .header h3 {
   flex-grow: 1;
   text-align: center;
+  padding-left: 20px;
 }
 
 .divider {
@@ -46,6 +50,7 @@
 
 .errors-list li{
   list-style: none;
+  color: #d70f5f;
 }
 
 
@@ -68,4 +73,28 @@
 .banner.error {
   background-color: red;
   color: white;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-container label {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  padding-top: 15px;
+  padding-left: 10px;
+  cursor: text;
+  transition: 0.2s;
+  color: gray;
+  font-size: 16px;
+}
+
+input:focus~label,
+input:valid~label,
+input:-webkit-autofill~label {
+  top: -10px;
+  font-size: 14px;
 }

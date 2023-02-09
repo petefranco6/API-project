@@ -112,24 +112,35 @@
   width: 80vw;
   justify-content: center;
   margin-left: 8%;
-  position: relative;
 }
 
 .form-price-per-night {
-  font-size: 1.75rem;
+  display: flex;
+  gap: .25rem;
+  align-items: flex-end;
+}
+
+.form-price {
+  font-size: 22px;
+  color: #222222;
+  font-weight: 600;
+}
+
+.form-night {
+  padding-bottom: 2px;
+  color: #222222;
+  font-weight: lighter;
+
 }
 
 .reserve-date-card {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
-  max-width: 35%;
+  width: 25%;
   gap: 1rem;
-  padding: 20px 30px 20px 30px;
+  padding: 24px;
   box-shadow: 3px 2px 14px rgba(0, 0, 0, 0.4);
-  position: absolute;
-  right: .5%;
-  bottom: -90%;
   border-radius: 15px;
 }
 
@@ -152,23 +163,7 @@
   display: flex;
   flex-wrap: wrap;
   row-gap: 1rem;
-}
-
-.reserve-form input {
-  height: 50px;
-  width: 50%;
-  border: 2px solid lightgray;
-}
-
-.checkin-input {
-  border-top-left-radius: .5rem;
-  border-bottom-left-radius: .5rem;
-}
-
-.reserve-form .checkout-input {
-  border-top-right-radius: .5rem;
-  border-bottom-right-radius: .5rem;
-  border-left: none;
+  justify-content: center;
 }
 
 .reserve-info-calc div {
@@ -181,11 +176,13 @@
 .total-price {
   padding-top: 1.5rem;
   border-top: 1px solid lightgray;
-  font-weight:900;
+  font-weight:600;
+  font-size: 20px;
 }
 
 .errors-list li{
   list-style: none;
+  color: #d70f5f;
 }
 
 .banner {
@@ -195,8 +192,7 @@
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 14px;
-  z-index: 10; /* to be sure it will be on top of other elements */
-  /* add some transition to make it smoother*/
+  z-index: 10;
   transition: all 0.3s ease-in-out;
 }
 
@@ -210,6 +206,39 @@
   color: white;
 }
 
+.spot-details-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.date-inputs {
+  display: flex;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.checkin-input, .checkout-input {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 12px 10px;
+  flex: 1;
+}
+
+.checkin-input label, .checkout-input label {
+  font-size: xx-small;
+  font-weight: bold;
+}
+
+.checkout-input {
+  border-left: 1px solid lightgray;
+}
+
+.date-inputs input {
+  border: none;
+}
+
 
 @media (width < 1580px) {
   .preview-false {
@@ -219,4 +248,18 @@
     width: 100%;
     border-radius: 15px;
   }
+}
+
+.spot-details-description img {
+  height: 14px;
+}
+
+.review-rating img {
+  height: 14px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
 }
