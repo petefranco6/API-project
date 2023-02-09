@@ -43,7 +43,7 @@ const validateSpot = [
     .exists({ checkFalsy: true })
     .isLength({ max: 49 })
     .matches(/^[a-zA-Z\s]+$/)
-    .withMessage("Name must be less than 50 characters."),
+    .withMessage("Name must be less than 50 letters and must not contain numbers."),
   check("description")
     .exists({ checkFalsy: true })
     .withMessage("Description is required."),
@@ -238,6 +238,11 @@ router.get("/current", requireAuth, async (req, res) => {
         attributes: [],
         required: false
       },
+      {
+        model: Booking,
+        attributes:["startDate", "endDate"],
+        required: false
+      }
     ],
     group: ["Spot.id","spotImages.url"],
   });

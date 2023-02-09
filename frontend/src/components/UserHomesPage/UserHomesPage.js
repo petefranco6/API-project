@@ -5,19 +5,19 @@ import { useEffect, useState } from "react";
 import * as spotsActions from "../../store/spots";
 import OwnedSpotItem from "../OwnedSpotItem/OwnedSpotItem";
 import classes from "./UserHomesPage.module.css";
-import deleteIcon from "../../icons/delete.png";
+import deleteIcon from "../../icons/trash.png";
 
 const UserHomesPage = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.session.user);
   const ownedSpots = useSelector((state) => state.spots.ownedSpots);
-  const message = useSelector((state) => state.spots.message);
+  const bannerMessage = useSelector((state) => state.spots.bannerMessage);
   const [checkedItems, setCheckedItems] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(spotsActions.getOwnedSpots());
-    setIsLoading(false);
+    dispatch(spotsActions.getOwnedSpots())
+      .then(setIsLoading(false));
   }, [dispatch]);
 
   const handleCheckboxChange = (e) => {
@@ -32,6 +32,7 @@ const UserHomesPage = () => {
   const deleteSpotsSelectedHandler = () => {
     for (const key in checkedItems) {
       if (checkedItems[key] === true) {
+        checkedItems[key] = false;
         dispatch(spotsActions.deleteSpot(key));
       }
     }
@@ -39,44 +40,53 @@ const UserHomesPage = () => {
 
   return (
     <div className={classes.container}>
-      {Object.keys(message).includes("error") && (
-        <div className="banner error">{message["error"]}</div>
+      {Object.keys(bannerMessage).includes("error") && (
+        <div className="banner error">{bannerMessage["error"]}</div>
       )}
-      {Object.keys(message).includes("success") && (
-        <div className="banner success">{message["success"]}</div>
+      {Object.keys(bannerMessage).includes("success") && (
+        <div className="banner success">{bannerMessage["success"]}</div>
       )}
       <div className={classes.welcome}>
-        <h1>Welcome {currentUser.firstName}!</h1>
-        <div className={classes["delete-multiple"]}>
-          <div className={classes["delete-icon"]}>
-            {Object.values(checkedItems).some((value) => value) && (
-              <img
-                alt=""
-                src={deleteIcon}
-                onClick={deleteSpotsSelectedHandler}
-              />
-            )}
-          </div>
-          <OpenModalButton
-            className="add-listing"
-            buttonText="Add a Listing"
-            modalComponent={<CreateSpotFormModal />}
+        {ownedSpots.length > 0 ? <h1>{ownedSpots.length} Listings</h1> : <h1>Welcome {currentUser.firstName}!</h1>}
+
+        {Object.values(checkedItems).some((value) => value) && (
+          <img
+            alt=""
+            className={classes.delete}
+            src={deleteIcon}
+            onClick={deleteSpotsSelectedHandler}
           />
-        </div>
+        )}
+        <OpenModalButton
+          className="add-listing"
+          buttonText="Create Listing"
+          modalComponent={<CreateSpotFormModal />}
+        />
       </div>
-      <div className={classes.divider}></div>
-      <ul>
-        {!isLoading &&
-          ownedSpots.length > 0 &&
-          ownedSpots.map((spot) => (
-            <OwnedSpotItem
-              details={spot}
-              key={spot.id}
-              handleCheckboxChange={handleCheckboxChange}
-            />
-          ))}
-      </ul>
-      {!isLoading && ownedSpots.length === 0 && <h1>No listings yet!</h1>}
+      <div>
+        { !isLoading && ownedSpots.length > 0 && <table>
+          <thead>
+            <tr className={classes["table-header"]}>
+              <th>Listing</th>
+              <th>Address</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Average Rating</th>
+              <th>Current # of Bookings</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ownedSpots.map((spot) => (
+              <OwnedSpotItem
+                details={spot}
+                key={spot.id}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            ))}
+          </tbody>
+        </table>}
+      </div>
+      {!isLoading && ownedSpots.length === 0 && <h1 className={classes["no-listings"]}>No listings yet!</h1>}
       {isLoading && <h1>Loading....</h1>}
     </div>
   );

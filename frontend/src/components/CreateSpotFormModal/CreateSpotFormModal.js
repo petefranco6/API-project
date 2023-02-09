@@ -15,14 +15,12 @@ function CreateSpotFormModal() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [url, setUrl] = useState("");
-  const [preview, setPreview] = useState(true);
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors([]);
-    return dispatch(
+    dispatch(
       spotsActions.createSpot({
         address,
         city,
@@ -32,13 +30,14 @@ function CreateSpotFormModal() {
         name,
         price,
         url,
-        preview,
+        preview: true,
       })
     )
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
+        console.log(data);
+        if (data.errors) setErrors(data.errors);
       });
   };
 
@@ -46,13 +45,13 @@ function CreateSpotFormModal() {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
+          <h3>Add Listing</h3>
           <img
             alt=""
             src={close}
             className={classes["close-icon"]}
             onClick={closeModal}
           />
-          <h3>Add Listing</h3>
         </div>
         <div className={classes.divider}></div>
         {errors.length > 0 && (
@@ -63,65 +62,87 @@ function CreateSpotFormModal() {
           </ul>
         )}
 
-        <input
-          type="text"
-          placeholder="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="City"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="State"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Country"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          maxLength="36"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          min={1}
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          required
-        />
-        <input
-          alt=""
-          placeholder="Image Url"
-          type="url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          required
-        />
+        <div className={classes["add-input-container"]}>
+          <input
+            id="address"
+            value={address}
+            type="text"
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          />
+          <label htmlFor="address">Address</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="city"
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+          <label htmlFor="city">City</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="state"
+            type="text"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+            required
+          />
+          <label htmlFor="state">State</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="country"
+            type="text"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            required
+          />
+          <label htmlFor="country">Country</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="description"
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+          <label htmlFor="description">Description</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <label htmlFor="name">Name</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="price"
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+          <label htmlFor="price">Price</label>
+        </div>
+        <div className={classes["add-input-container"]}>
+          <input
+            id="url"
+            alt=""
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+          />
+          <label htmlFor="url">Image Url</label>
+        </div>
         <button className={classes.create} type="submit">
           Create
         </button>

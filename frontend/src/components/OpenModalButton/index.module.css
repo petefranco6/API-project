@@ -3,7 +3,7 @@
     border: none;
     cursor: pointer;
     height: 40px;
-    padding: .5rem;
+    padding: .4rem;
     border-radius: 1rem;
     text-decoration: none;
 }
@@ -30,7 +30,7 @@
     border: 1px solid lightgrey;
     border-radius: .5rem;
     background-color: white;
-    width: 80%;
     height: 100%;
+    padding: .7rem;
     cursor: pointer;
 }

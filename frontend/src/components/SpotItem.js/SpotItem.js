@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import classes from "./SpotItem.module.css";
+import star from "../../icons/star.png";
 
 const SpotItem = ({ details }) => {
   let stars;
+
+  function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
   if (details.avgRating) {
     stars = Math.round(parseInt(details.avgRating) * 1e8) / 1e8;
@@ -21,13 +28,14 @@ const SpotItem = ({ details }) => {
         <div className={classes.title}>
           <p className={classes.thick}>{`${details.city}, ${details.state}`}</p>
           <div className={classes.rating}>
-            {details.avgRating && <i className="fa-solid fa-star"></i>}
+            {details.avgRating && <img alt="" src={star} />}
             <div>{stars}</div>
           </div>
         </div>
-        <div className={classes.description}>{details.description}</div>
+        <div className={classes.name}>{details.name}</div>
+        <div className={classes.miles}>{getRandomIntInclusive(10,1000)} miles away</div>
         <div className={classes.price}>
-          <strong>${details.price}</strong> per night
+          <strong>${details.price}</strong> night
         </div>
       </div>
     </Link>

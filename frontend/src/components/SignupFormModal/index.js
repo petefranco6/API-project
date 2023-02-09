@@ -15,6 +15,7 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const [isFilled, setIsFilled] = useState(false);
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
@@ -45,13 +46,13 @@ function SignupFormModal() {
     <>
       <form className={classes.container} onSubmit={handleSubmit}>
         <div className={classes.header}>
+          <h3>Sign Up</h3>
           <img
             alt=""
             src={close}
             className={classes["close-icon"]}
             onClick={closeModal}
           />
-          <h3>Sign Up</h3>
         </div>
         <div className={classes.divider}></div>
         {errors.length > 0 && (
@@ -63,55 +64,76 @@ function SignupFormModal() {
         )}
 
         <div className={classes.name}>
-          <input
-            className={classes.first}
-            placeholder="First Name"
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          <input
-            placeholder="Last Name"
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
+          <div className={classes["input-container"]}>
+            <input
+              id="first"
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+            <label htmlFor="first">First Name</label>
+          </div>
+          <div className={classes["input-container"]}>
+            <input
+              className={isFilled ? classes.filled : ""}
+              id="last"
+              type="text"
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
+                setIsFilled(e.target.value.length > 0);
+              }}
+              required
+            />
+            <label htmlFor="last">Last Name</label>
+          </div>
         </div>
         <div className={classes.credentials}>
-          <input
-            className={classes.username}
-            placeholder="Username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            placeholder="Email"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className={classes["input-container"]}>
+            <input
+              className={classes.username}
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <label htmlFor="username">Username</label>
+          </div>
+          <div className={classes["input-container"]}>
+            <input
+              id="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <label htmlFor="email">Email</label>
+          </div>
         </div>
         <div className={classes.password}>
-          <input
-            className={classes.password1}
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <input
-            placeholder="Confirm Password"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
+          <div className={classes["input-container"]}>
+            <input
+              className={classes.password1}
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <label htmlFor="password">Password</label>
+          </div>
+          <div className={classes["input-container"]}>
+            <input
+              id="confirm-password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <label htmlFor="confirm-password">Confirm Password</label>
+          </div>
         </div>
         <button className={classes.signup} type="submit">
           Sign Up

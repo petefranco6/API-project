@@ -1,9 +1,10 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 580px;
-  gap: 20px;
+  gap: 1rem;
   justify-content: space-between;
+  align-items: center;
+  width: 45vw;
 }
 
 .divider {
@@ -24,6 +25,7 @@
 .header {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .header h3 {
@@ -36,7 +38,8 @@
   cursor: pointer;
 }
 
-.create {
+.edit {
+  width: 90%;
   height: 50px;
   border-radius: 10px;
   background-color: #d70f5f;
@@ -46,17 +49,12 @@
   text-align: center;
 }
 
-.error-list {
-  list-style: none;
-  color: #d70f5f;
-}
-
-.add-input-container {
+.edit-input-container {
   position: relative;
   width: 90%;
 }
 
-.add-input-container label {
+.edit-input-container label {
   position: absolute;
   left: 0;
   top: 5px;
@@ -68,9 +66,14 @@
   font-size: 16px;
 }
 
-input:focus ~ label,
-input:valid ~ label,
-input:-webkit-autofill ~ label {
+input:focus~label,
+input:valid~label,
+input:-webkit-autofill~label {
   top: -10px;
   font-size: 14px;
+}
+
+.error-list {
+  list-style: none;
+  color: #d70f5f;
 }

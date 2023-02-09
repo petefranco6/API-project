@@ -1,26 +1,6 @@
-.divider {
-    border: 1px solid lightgray;
-    padding: 0;
-    margin: 0;
-  }
-
-.owned-item {
-    padding: 1rem;
-    list-style: none;
-    display: flex;
-    justify-content: flex-start;
-    column-gap: 2rem;
-    position: relative;
-    border-radius: .25rem;
-    height: 200px;
-}
-
-.owned-item:hover {
-    background-color: rgb(244, 209, 209);
-}
-
 .owned-spot-img {
-    height: 80px;
+    height: 60px;
+    width: 33%;
     padding: 0;
 }
 
@@ -34,42 +14,25 @@
 
 .checkbox-owned-spot {
     display: flex;
-    gap: 2rem;
-}
-
-.delete-icon img {
-    width: 90%;
-    cursor: pointer;
+    gap: 1rem;
+    align-items: center;
+    padding-left: 1rem;
 }
 
 .delete-icon {
-    width: 50%;
-}
-
-.hover-actions {
-    display: flex;
+    height: 35px;
     position: absolute;
-    right: 0%;
-    bottom: 5%;
-    gap: 4rem;
-    width: 150px;
-    z-index: 1;
+    right: 35px;
+    top: 15px;
+    cursor: pointer;
 }
 
-.spot-info {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: center;
-}
-
-.location {
+tr td:not(:first-child):not(:last-child) {
+    width: 14%;
     text-align: center;
 }
 
-.description {
-    padding-top: 25px;
-    padding-bottom: 25px;
-    max-width: 500px;
+.delete-row {
+    width: .1%;
+    position: relative;
 }

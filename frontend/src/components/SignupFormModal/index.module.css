@@ -7,10 +7,12 @@
   }
 
   .container input {
-    height: 50px;
-    border-radius: 4px;
+    height: 60px;
+    border: none;
     padding: 4px;
-    border: 1px solid lightgrey ;
+    width: 100%;
+    border-radius: .5rem;
+    padding-left: 10px;
   }
 
 .header {
@@ -21,6 +23,7 @@
   .header h3 {
     flex-grow: 1;
     text-align: center;
+    padding-left: 20px;
   }
 
   .divider {
@@ -46,13 +49,44 @@
 
   .errors-list li{
     list-style: none;
+    color: #d70f5f;
   }
 
   .name, .password, .credentials {
     display: flex;
     flex-direction: column;
+    border: 1px solid lightgrey;
+    border-radius: .5rem;
   }
 
-  .first, .username, .password1 {
+  .username, .password1 {
     border-bottom: none;
   }
+
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-container label {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  padding-top: 15px;
+  padding-left: 10px;
+  cursor: text;
+  transition: 0.2s;
+  color: gray;
+  font-size: 16px;
+}
+
+input:focus~label,
+input:valid~label,
+input:-webkit-autofill~label {
+  top: -10px;
+  font-size: 14px;
+}
+
+.input-container:nth-child(1) {
+  border-bottom: 1px solid lightgrey;
+}
