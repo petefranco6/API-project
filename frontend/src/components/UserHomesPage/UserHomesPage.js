@@ -47,7 +47,7 @@ const UserHomesPage = () => {
         <div className="banner success">{bannerMessage["success"]}</div>
       )}
       <div className={classes.welcome}>
-        {ownedSpots.length > 0 ? <h1>{ownedSpots.length} Listings</h1> : <h1>Welcome {currentUser.firstName}!</h1>}
+        {ownedSpots?.length > 0 ? <h1>{ownedSpots.length} Listings</h1> : <h1>Welcome {currentUser.firstName}!</h1>}
 
         {Object.values(checkedItems).some((value) => value) && (
           <img
