@@ -64,7 +64,7 @@ const UserHomesPage = () => {
         />
       </div>
       <div>
-        { !isLoading && ownedSpots.length > 0 && <table>
+        { !isLoading && ownedSpots?.length && <table>
           <thead>
             <tr className={classes["table-header"]}>
               <th>Listing</th>
@@ -86,7 +86,7 @@ const UserHomesPage = () => {
           </tbody>
         </table>}
       </div>
-      {!isLoading && ownedSpots.length === 0 && <h1 className={classes["no-listings"]}>No listings yet!</h1>}
+      {!isLoading && ownedSpots?.length === 0 && <h1 className={classes["no-listings"]}>No listings yet!</h1>}
       {isLoading && <h1>Loading....</h1>}
     </div>
   );
