@@ -244,7 +244,7 @@ router.get("/current", requireAuth, async (req, res) => {
         required: false
       }
     ],
-    group: ["Spot.id","spotImages.url"],
+    group: ["Spot.id","spotImages.url", "Booking.id"],
   });
 
   res.json({
