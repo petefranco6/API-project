@@ -15,28 +15,26 @@ function ProfileButton({ user }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-  const ulRef = useRef();
+  const menuRef = useRef();
 
   useEffect(() => {
-    if (!showMenu) return;
-
-    const closeMenu = (e) => {
-      if (!ulRef.current.contains(e.target)) {
+    const handleOutsideClick = (event) => {
+      // if (ulRef.current && !ulRef.current.contains(event.target)) {
+      //   setShowMenu(false);
+      // }
+      if (!menuRef.current.contains(event.target)) {
         setShowMenu(false);
       }
     };
 
-    document.addEventListener("click", closeMenu);
+    document.addEventListener("mouseup", handleOutsideClick);
 
-    return () => document.removeEventListener("click", closeMenu);
-  }, [showMenu]);
+    return () => {
+      document.removeEventListener("mouseup", handleOutsideClick);
+    };
+  }, []);
 
   const closeMenu = () => setShowMenu(false);
-
-  const openMenu = () => {
-    if (showMenu) return;
-    setShowMenu(true);
-  };
 
   const logoutHandler = (e) => {
     e.preventDefault();
@@ -46,8 +44,13 @@ function ProfileButton({ user }) {
   };
 
   return (
-    <>
-      <button onClick={openMenu} className={classes["profile-btn"]}>
+    <div ref={menuRef}>
+      <button
+        onClick={() => {
+          setShowMenu((prevState) => !prevState);
+        }}
+        className={classes["profile-btn"]}
+      >
         <img className={classes.menu} src={menu} alt="" />
         <img className={classes.profile} src={profile} alt="" />
       </button>
@@ -56,7 +59,6 @@ function ProfileButton({ user }) {
           className={`${showMenu && classes["dropdown-menu"]} ${
             !showMenu && classes.hidden
           }`}
-          ref={ulRef}
         >
           {user ? (
             <>
@@ -67,7 +69,11 @@ function ProfileButton({ user }) {
               </li>
               <div className={classes.divider}></div>
               <li className={classes.user}>
-                <Link onClick={closeMenu} className={classes.host} to="/hosting">
+                <Link
+                  onClick={closeMenu}
+                  className={classes.host}
+                  to="/hosting"
+                >
                   Manage your listings
                 </Link>
               </li>
@@ -103,7 +109,7 @@ function ProfileButton({ user }) {
           )}
         </ul>
       </div>
-    </>
+    </div>
   );
 }
 
